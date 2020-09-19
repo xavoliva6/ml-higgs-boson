@@ -8,9 +8,6 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
     N, D = tx.shape
     w = initial_w
 
-    # add column of ones to add bias term
-    tx = np.hstack((np.ones((N, 1)), tx))
-
     for n_iter in range(max_iters):
         # compute gradient
         e = y - tx @ w
@@ -20,7 +17,8 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
         w = w - gamma * grad
 
     # calculate final loss
-    loss = calculate_loss(y, tx, w)
+    y_pred = tx @ w
+    loss = calculate_mse_loss(y, y_pred)
 
     return w, loss
 
@@ -29,9 +27,6 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
     """Linear regression using stochastic gradient descent"""
     N, D = tx.shape
     w = initial_w
-
-    # add column of ones to add bias term
-    tx = np.hstack((np.ones((N, 1)), tx))
 
     for n_iter in range(max_iters):
         # select a random sample
@@ -45,7 +40,8 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
         w = w - gamma * grad
 
     # calculate loss
-    loss = calculate_loss(y, tx, w)
+    y_pred = tx @ w
+    loss = calculate_mse_loss(y, y_pred)
 
     return w, loss
 
@@ -54,14 +50,12 @@ def least_squares(y, tx):
     """Least squares regression using normal equations"""
     N, D = tx.shape
 
-    # add column of ones to add bias term
-    tx = np.hstack((np.ones((N, 1)), tx))
-
     # compute w using explicit solution
     w = np.linalg.inv(tx.T @ tx) @ tx.T @ y
 
     # calculate loss
-    loss = calculate_loss(y, tx, w)
+    y_pred = tx @ w
+    loss = calculate_mse_loss(y, y_pred)
 
     return w, loss
 
@@ -70,14 +64,12 @@ def ridge_regression(y, tx, lambda_):
     """Ridge regression using normal equations"""
     N, D = tx.shape
 
-    # add column of ones to add bias term
-    tx = np.hstack((np.ones((N, 1)), tx))
-
     # compute w using explicit solution
-    w = np.linalg.inv(tx.T @ tx + lambda_/2*N * np.identity(D+1)) @ tx.T @ y
+    w = np.linalg.inv(tx.T @ tx + lambda_/2*N * np.identity(D)) @ tx.T @ y
 
     # calculate loss
-    loss = calculate_loss(y, tx, w)
+    y_pred = tx @ w
+    loss = calculate_mse_loss(y, y_pred)
 
     return w, loss
 
@@ -85,9 +77,6 @@ def ridge_regression(y, tx, lambda_):
 def logistic_regression(y, tx, initial_w, max_iters, gamma):
     """Logistic regression using gradient descent or SGD"""
     N, D = tx.shape
-
-    # add column of ones to add bias term
-    tx = np.hstack((np.ones((N, 1)), tx))
 
     w = initial_w
     for n_iter in range(max_iters):
@@ -106,9 +95,6 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma):
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     """Regularized logistic regression using gradient descent or SGD"""
     N, D = tx.shape
-
-    # add column of ones to add bias term
-    tx = np.hstack((np.ones((N, 1)), tx))
 
     w = initial_w
     for n_iter in range(max_iters):
