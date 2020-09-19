@@ -1,6 +1,6 @@
 import numpy as np
 
-from utils import calculate_mse
+from utils import calculate_loss
 
 
 def least_squares_GD(y, tx, initial_w, max_iters, gamma):
@@ -14,9 +14,8 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
         # update w by gradient descent update
         w = w - gamma * grad
 
-    # calculate loss
-    err = y - tx @ w
-    loss = calculate_mse(err)
+        # calculate loss
+        loss = calculate_loss(y, tx, w)
 
     return w, loss
 
@@ -31,19 +30,28 @@ def least_squares(y, tx):
     # add column of ones to add bias term
     tx = np.hstack((np.ones((tx.shape[0], 1)), tx))
 
-    # compute w using pseudo-inverse
+    # compute w using explicit solution
     w = np.linalg.inv(tx.T @ tx) @ tx.T @ y
 
     # calculate loss
-    err = y - tx @ w
-    loss = calculate_mse(err)
+    loss = calculate_loss(y, tx, w)
 
     return w, loss
 
 
 def ridge_regression(y, tx, lambda_):
     """Ridge regression using normal equations"""
-    pass
+    # add column of ones to add bias term
+    tx = np.hstack((np.ones((tx.shape[0], 1)), tx))
+    N, D = tx.shape
+
+    # compute w using explicit solution
+    w = np.linalg.inv(tx.T @ tx + lambda_/2*N * np.identity(D)) @ tx.T @ y
+
+    # calculate loss
+    loss = calculate_loss(y, tx, w)
+
+    return w, loss
 
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma):

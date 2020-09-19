@@ -11,7 +11,7 @@ def calculate_mae(e):
     return np.mean(np.abs(e))
 
 
-def compute_loss(y, tx, w):
+def calculate_loss(y, tx, w):
     """Calculate the loss."""
     e = y - tx @ w
     return calculate_mse(e)
