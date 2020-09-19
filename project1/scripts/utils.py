@@ -35,3 +35,16 @@ def standardize(X):
     X_stand = (X - mean) / std
 
     return X_stand
+
+
+def sigmoid(x):
+    """apply sigmoid function on t."""
+    return 1.0 / (1 + np.exp(-x))
+
+
+def calculate_logistic_loss(y, tx, w):
+    """compute the cost by negative log likelihood."""
+    # pred = sigmoid(tx @ w)
+    # loss = y.T @ np.log(pred) + (1 - y).T @ np.log(1 - pred)
+    loss = np.sum(np.log(1 + np.exp(tx @ w))) - y.T @ tx @ w
+    return loss
