@@ -16,13 +16,30 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
 
         # calculate loss
         loss = calculate_loss(y, tx, w)
+        print(loss)
 
     return w, loss
 
 
 def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
     """Linear regression using stochastic gradient descent"""
-    pass
+    w = initial_w
+    for n_iter in range(max_iters):
+        # select a random sample
+        nr = np.random.randint(low=0, high=tx.shape[0])
+        tx_s, y_s = tx[nr], y[nr]
+        # compute gradient
+        err = y_s - tx_s @ w
+        grad = -tx_s.T * err
+
+        # update w by gradient descent update
+        w = w - gamma * grad
+
+        # calculate loss
+        loss = calculate_loss(y, tx, w)
+        print(loss)
+
+    return w, loss
 
 
 def least_squares(y, tx):
