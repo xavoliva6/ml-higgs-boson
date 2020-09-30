@@ -51,7 +51,7 @@ def least_squares(y, tx):
     N, D = tx.shape
 
     # compute w using explicit solution
-    w = np.linalg.inv(tx.T @ tx) @ tx.T @ y
+    w = np.linalg.solve(tx.T @ tx, tx.T @ y)
 
     # calculate loss
     y_pred = tx @ w
@@ -65,7 +65,7 @@ def ridge_regression(y, tx, lambda_):
     N, D = tx.shape
 
     # compute w using explicit solution
-    w = np.linalg.inv(tx.T @ tx + lambda_/2*N * np.identity(D)) @ tx.T @ y
+    w = np.linalg.solve(tx.T @ tx + lambda_/2*N * np.identity(D), tx.T @ y)
 
     # calculate loss
     y_pred = tx @ w
