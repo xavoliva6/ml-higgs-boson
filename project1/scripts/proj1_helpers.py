@@ -6,7 +6,7 @@ import numpy as np
 
 def load_csv_data(data_path, sub_sample=False):
     """Loads data and returns y (class labels), tX (features) and ids (event ids)"""
-    y = np.genfromtxt(data_path, delimiter=",", skip_header=1, dtype=str, usecols=1)
+    y = np.genfromtxt(data_path, delimiter=",", skip_header=1, dtype=str, usecols=[1])
     x = np.genfromtxt(data_path, delimiter=",", skip_header=1)
     ids = x[:, 0].astype(np.int)
     input_data = x[:, 2:]
