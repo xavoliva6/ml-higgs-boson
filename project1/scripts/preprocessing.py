@@ -2,7 +2,7 @@ import numpy as np
 
 
 
-def data_replacement(X, method="mean"):
+def data_replacement(X, method="median"):
     """
     replaces missin data points in either matrices or vectors
 
@@ -18,6 +18,15 @@ def data_replacement(X, method="mean"):
             # fill them up
             vec[missing] = feature_mean
             return vec
+        elif method == "median":
+            # find all missing points
+            missing = vec == -999.
+            # calculate the remaining points mean
+            feature_median = np.median(vec[~missing])
+            # fill them up
+            vec[missing] = feature_median
+            return vec
+
 
 
 

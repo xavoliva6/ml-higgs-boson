@@ -11,7 +11,7 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
     for n_iter in range(max_iters):
         # compute gradient
         e = y - tx @ w
-        grad = - 1/N * tx.T @ e
+        grad = - 1 / N * tx.T @ e
 
         # update w by gradient descent update
         w = w - gamma * grad
@@ -65,7 +65,7 @@ def ridge_regression(y, tx, lambda_):
     N, D = tx.shape
 
     # compute w using explicit solution
-    w = np.linalg.inv(tx.T @ tx + lambda_/2*N * np.identity(D)) @ tx.T @ y
+    w = np.linalg.inv(tx.T @ tx + lambda_ / 2 * N * np.identity(D)) @ tx.T @ y
 
     # calculate loss
     y_pred = tx @ w
@@ -98,7 +98,8 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
 
     w = initial_w
     for n_iter in range(max_iters):
-        grad_reg_log_loss = 1/N * tx.T @ (sigmoid(tx @ w) - y) + (lambda_ / N) * w
+        grad_reg_log_loss = 1 / N * \
+            tx.T @ (sigmoid(tx @ w) - y) + (lambda_ / N) * w
 
         # update w by gradient descent update
         w = w - gamma * grad_reg_log_loss

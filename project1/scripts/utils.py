@@ -1,5 +1,18 @@
 import numpy as np
 
+def split_data(X, Y, ids, val_prop=0.3):
+    "Splits data into training and validation"
+    # TODO maybe add randominzation here?
+    X_tr  = X[:int(X.shape[0]*(1-val_prop))]
+    Y_tr  = Y[:int(X.shape[0]*(1-val_prop))]
+    ids_tr  = ids[:int(X.shape[0]*(1-val_prop))]
+
+    X_val  = X[int(X.shape[0]*(1-val_prop)):]
+    Y_val  = Y[int(X.shape[0]*(1-val_prop)):]
+    ids_val  = ids[int(X.shape[0]*(1-val_prop)):]
+
+    return (X_tr, Y_tr, ids_tr), (X_val, Y_val, ids_val)
+
 
 def calculate_mse(e):
     """Calculate the mse for error vector e."""
@@ -55,7 +68,7 @@ def cross_validation(y, x, k_indices, k_iteration):
     val_index = k_indices[k_iteration]
     train_index = k_indices[np.arange(k) != k_iteration]
     train_index = train_index.reshape(-1)
-    
+
     y_val = y[val_index]
     y_train = y[train_index]
     x_val = x[val_index]
