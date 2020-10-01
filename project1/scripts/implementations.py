@@ -65,11 +65,7 @@ def ridge_regression(y, tx, lambda_):
     N, D = tx.shape
 
     # compute w using explicit solution
-<<<<<<< HEAD
-    w = np.linalg.inv(tx.T @ tx + lambda_ / 2 * N * np.identity(D)) @ tx.T @ y
-=======
-    w = np.linalg.solve(tx.T @ tx + lambda_/2*N * np.identity(D), tx.T @ y)
->>>>>>> 4968aee7c22f49a6b68e59dcfce85474c71bf536
+    w = np.linalg.solve(tx.T @ tx + lambda_ / 2 * N * np.identity(D)) @ tx.T @ y
 
     # calculate loss
     y_pred = tx @ w
