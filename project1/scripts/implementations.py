@@ -3,7 +3,7 @@ import numpy as np
 from utils import *
 
 
-def least_squares_GD(y, tx, initial_w, max_iters, gamma):
+def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
     """Linear regression using gradient descent"""
     N, D = tx.shape
     w = initial_w
@@ -23,7 +23,7 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma):
     return w, loss
 
 
-def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
+def least_squares_SGD(y, tx, initial_w, max_iters, gamma, **kwargs):
     """Linear regression using stochastic gradient descent"""
     N, D = tx.shape
     w = initial_w
@@ -46,7 +46,7 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma):
     return w, loss
 
 
-def least_squares(y, tx):
+def least_squares(y, tx, **kwargs):
     """Least squares regression using normal equations"""
     N, D = tx.shape
 
@@ -60,12 +60,12 @@ def least_squares(y, tx):
     return w, loss
 
 
-def ridge_regression(y, tx, lambda_):
+def ridge_regression(y, tx, lambda_, **kwargs):
     """Ridge regression using normal equations"""
     N, D = tx.shape
 
     # compute w using explicit solution
-    w = np.linalg.solve(tx.T @ tx + lambda_ / 2 * N * np.identity(D)) @ tx.T @ y
+    w = np.linalg.solve(tx.T @ tx + 2 * N * lambda_ * np.identity(D), tx.T @ y)
 
     # calculate loss
     y_pred = tx @ w
@@ -74,13 +74,12 @@ def ridge_regression(y, tx, lambda_):
     return w, loss
 
 
-def logistic_regression(y, tx, initial_w, max_iters, gamma):
+def logistic_regression(y, tx, initial_w, max_iters, gamma, **kwargs):
     """Logistic regression using gradient descent or SGD"""
     N, D = tx.shape
 
     w = initial_w
     for n_iter in range(max_iters):
-
         grad_log_loss = tx.T @ (sigmoid(tx @ w) - y)
 
         # update w by gradient descent update
@@ -98,8 +97,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
 
     w = initial_w
     for n_iter in range(max_iters):
-        grad_reg_log_loss = 1 / N * \
-            tx.T @ (sigmoid(tx @ w) - y) + (lambda_ / N) * w
+        grad_reg_log_loss = tx.T @ (sigmoid(tx @ w) - y) + 2 * N * lambda_ * w
 
         # update w by gradient descent update
         w = w - gamma * grad_reg_log_loss

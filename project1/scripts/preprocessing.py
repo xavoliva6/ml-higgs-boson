@@ -1,11 +1,9 @@
 import numpy as np
 
 
-
 def data_replacement(X, method="median"):
     """
-    replaces missin data points in either matrices or vectors
-
+    replaces missing data points in either matrices or vectors
     different methods: mean
     """
 
@@ -27,42 +25,39 @@ def data_replacement(X, method="median"):
             vec[missing] = feature_median
             return vec
 
-
-
-
     # for  a vector
     if X.ndim == 1:
         return fill_vec(X, method=method)
 
     # for a matrix
     if X.ndim == 2:
-        for vec_indx, vec in enumerate(X.T):
-            X[:, vec_indx] = fill_vec(vec, method=method)
+        for vec_index, vec in enumerate(X.T):
+            X[:, vec_index] = fill_vec(vec, method=method)
         return X
 
 
 def z_score_outlier_detection(X, thresh=2.5):
     """
-    Peforms iterative z score outlier detection, in which detect outliers
-    are repalced.
+    Performs iterative z score outlier detection, in which detect outliers
+    are replaced.
 
     Args:
-        X: NxD Matrix, where we look for outliers witihin columns
+        X: NxD Matrix, where we look for outliers withing columns
         thresh: z score threshold
 
     Returns
         X: NxD Matrix, without outliers
     """
 
-    for f_indx, feature_vec in enumerate(X.T):
-        while(True):
+    for f_index, feature_vec in enumerate(X.T):
+        while True:
             # calculate z scores
-            z_scores = ((feature_vec)-np.mean(feature_vec))/np.std(feature_vec)
+            z_scores = ((feature_vec) - np.mean(feature_vec)) / np.std(feature_vec)
             # find all z score above threshold
-            outliers = np.abs(z_scores)>thresh
+            outliers = np.abs(z_scores) > thresh
             # if there are none, stop with this feature
             if not outliers.any():
-                X[:, f_indx] = feature_vec
+                X[:, f_index] = feature_vec
                 break
             # if there are, remove and replace them
             else:
