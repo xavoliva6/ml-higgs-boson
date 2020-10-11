@@ -67,3 +67,23 @@ def z_score_outlier_detection(X, thresh=2.5):
                 feature_vec = data_replacement(feature_vec)
 
     return X
+
+
+def add_ones_column(X):
+    return np.hstack((np.ones((X.shape[0], 1)), X))
+
+
+def augment_features_polynomial(X, M):
+    """Augment the input with a polynomial basis (of arbitrary degree M )"""
+    if M < 2:
+        return X
+
+    index_start = 1 if np.all(X[:, 0] == 1) else 0
+
+    X_poly = X
+
+    for i in range(2, M + 1):
+        X_powered = np.power(X[:, index_start:], i)
+        X_poly = np.hstack((X_poly, X_powered))
+
+    return X_poly

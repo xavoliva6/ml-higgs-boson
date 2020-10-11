@@ -3,7 +3,7 @@ import numpy as np
 
 from utils import split_data, standardize, calculate_mse_loss
 from proj1_helpers import load_csv_data, predict_labels, create_csv_submission
-from preprocessing import z_score_outlier_detection
+from preprocessing import z_score_outlier_detection, add_ones_column, augment_features_polynomial
 from implementations import *
 
 SUBMISSION_PATH = "submissions"
@@ -35,8 +35,14 @@ if __name__ == "__main__":
     X_te = standardize(X_te)
 
     # add ones
-    X = np.hstack((np.ones((X.shape[0], 1)), X))
-    X_te = np.hstack((np.ones((X_te.shape[0], 1)), X_te))
+    X = add_ones_column(X)
+    X_te = add_ones_column(X_te)
+
+    # Augment feature vector
+    X = augment_features_polynomial(X, M=4)
+    X_te = augment_features_polynomial(X_te, M=4)
+
+    N, D = X.shape
 
     # split data
     (X_tr, Y_tr, ids_tr), (X_val, Y_val, ids_val) = split_data(X, Y, ids, val_prop=VAL_PERCENTAGE)
@@ -49,7 +55,7 @@ if __name__ == "__main__":
     for f_name, f in IMPLEMENTATIONS.items():
         print("[!] Starting {} ...".format(f_name))
 
-        W_init = np.random.rand((D + 1), )
+        W_init = np.random.rand(D, )
         args_train = {"tx": X_tr, "y": Y_tr, "initial_w": W_init, "max_iters": max_iters,
                       "gamma": gamma, "lambda_": lambda_}
 
@@ -72,7 +78,7 @@ if __name__ == "__main__":
         f_best_name, loss_val_best))
 
     args_train = {"tx": X, "y": Y, "initial_w": W_init, "max_iters": max_iters,
-                "gamma": gamma, "lambda_": lambda_}
+                  "gamma": gamma, "lambda_": lambda_}
 
     W_best, _ = f_best(**args_train)
     # generate submission
