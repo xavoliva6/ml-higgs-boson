@@ -1,6 +1,7 @@
 import datetime
 import numpy as np
 import os.path
+np.random.seed(0)
 
 from utils import split_data, standardize, calculate_mse_loss, cross_validation, build_k_indices
 from proj1_helpers import load_csv_data, predict_labels, create_csv_submission
@@ -15,7 +16,7 @@ PREPROCESSED_X = "../data/preprocessed_X.npy"
 PREPROCESSED_Y = "../data/preprocessed_Y.npy"
 PREPROCESSED_X_te = "../data/preprocessed_X_te.npy"
 PREPROCESSED_Y_te = "../data/preprocessed_Y_te.npy"
-
+PREPROCESSED_ids_te = "../data/preprocessed_ids_te.npy"
 
 IMPLEMENTATIONS = {"Least Squares Gradient Descent": least_squares_GD,
                    "Least Squares Stochastic GD": least_squares_SGD,
@@ -32,8 +33,8 @@ GAMMA = .01
 LAMBDA_ = .1
 K = 5
 USE_PRE = True
+
 if __name__ == "__main__":
-    print(os.path.isfile(PREPROCESSED_X))
     if not (os.path.isfile(PREPROCESSED_X) and USE_PRE):
         Y, X, ids = load_csv_data(TRAIN_PATH)
         Y_te, X_te, ids_te = load_csv_data(TEST_PATH)
@@ -59,6 +60,7 @@ if __name__ == "__main__":
         np.save(PREPROCESSED_X_te, X_te, allow_pickle=True)
         np.save(PREPROCESSED_Y, Y, allow_pickle=True)
         np.save(PREPROCESSED_Y_te, Y_te, allow_pickle=True)
+        np.save(PREPROCESSED_ids_te, ids_te, allow_pickle=True)
         print("[*] Saved Preprocessed Data")
     else:
         print("[*] Using Saved Data")
@@ -66,6 +68,7 @@ if __name__ == "__main__":
         X_te = np.load(PREPROCESSED_X_te)
         Y = np.load(PREPROCESSED_Y)
         Y_te = np.load(PREPROCESSED_Y_te)
+        ids_te = np.load(PREPROCESSED_ids_te)
 
     N, D = X.shape
 
@@ -91,7 +94,7 @@ if __name__ == "__main__":
             prediction_val = X_val @ W
 
             loss_val = calculate_mse_loss(Y_val, prediction_val)
-            print(loss_val)
+
             loss_array_val[k_iteration, j] = loss_val
 
             print(f"\t [==>] Validation Loss: {loss_val}")
