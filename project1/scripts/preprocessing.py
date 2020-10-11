@@ -12,10 +12,13 @@ def feature_scale(X):
 
 def standardize(X):
     """Standardization"""
-    mean = np.mean(X, axis=0)
-    std = np.std(X, axis=0)
+    X_stand = np.ones(shape=X.shape)
+    index_start = 1 if np.all(X[:, 0] == 1) else 0
 
-    X_stand = (X - mean) / std
+    mean = np.mean(X[:, index_start:], axis=0)
+    std = np.std(X[:, index_start:], axis=0)
+
+    X_stand[:, index_start:] = (X[:, index_start:] - mean) / std
 
     return X_stand
 
@@ -35,12 +38,13 @@ def split_data(X, Y, ids, val_prop=0.3):
 
 
 def corr_filter(X, threshold):
-    n = X.shape[1]
-    columns = np.ones((n,))
-    for i in range(n-1):
-        for j in range(i+1, n):
+    D = X.shape[1]
+    columns = np.ones(shape=(D - 1,))
+
+    for i in range(D - 1):
+        for j in range(i + 1, D):
             if columns[j] == 1:
-                correlation = np.abs(np.corrcoef(X[:,i], X[:,j])[0,1])
+                correlation = np.abs(np.corrcoef(X[:, i], X[:, j])[0, 1])
                 if correlation >= threshold:
                     columns[j] = 0
     return columns

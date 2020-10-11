@@ -1,6 +1,7 @@
 import datetime
 import numpy as np
 import os.path
+from collections import defaultdict
 
 from utils import calculate_mse_loss, cross_validation, build_k_indices
 from proj1_helpers import load_csv_data, predict_labels, create_csv_submission
@@ -21,20 +22,47 @@ PREPROCESSED_Y_te = "../data/preprocessed_Y_te.npy"
 PREPROCESSED_ids_te = "../data/preprocessed_ids_te.npy"
 
 IMPLEMENTATIONS = {
-    # "Least Squares Gradient Descent": least_squares_GD,
-    # "Least Squares Stochastic GD": least_squares_SGD,
-    # "Least Squares using Pseudo-Inverse": least_squares,
-    # "Ridge Regression": ridge_regression,
-    "Logistic Regression": logistic_regression,
-    # "Regularized Logistic Regression": reg_logistic_regression
+    "Least Squares Gradient Descent": {
+        "function": least_squares_GD,
+        "max_iters": 100,
+        "gamma": 0.01,
+        "lambda_": None
+    },
+    "Least Squares Stochastic GD": {
+        "function": least_squares_SGD,
+        "max_iters": 100,
+        "gamma": 0.01,
+        "lambda_": None
+    },
+    "Least Squares using Pseudo-Inverse": {
+        "function": least_squares,
+        "max_iters": None,
+        "gamma": None,
+        "lambda_": None
+    },
+    "Ridge Regression": {
+        "function": ridge_regression,
+        "max_iters": 100,
+        "gamma": 0.01,
+        "lambda_": 0.1
+    },
+    "Logistic Regression": {
+        "function": logistic_regression,
+        "max_iters": 500,
+        "gamma": 0.01,
+        "lambda_": None
+    },
+    "Regularized Logistic Regression": {
+        "function": reg_logistic_regression,
+        "max_iters": 500,
+        "gamma": 0.1,
+        "lambda_": 0.1
+    }
 }
 
 Z_VALUE = 3.0
 DO_Z_OUTLIER_DETECTION = True
 
-MAX_ITERS = 1000
-GAMMA = .01
-LAMBDA_ = .1
 K = 5
 USE_PRE = True
 
@@ -100,12 +128,15 @@ if __name__ == "__main__":
             else:
                 Y_f_train = Y_train
 
-            args_train = {"tx": X_train, "y": Y_f_train, "initial_w": W_init, "max_iters": MAX_ITERS,
-                          "gamma": GAMMA, "lambda_": LAMBDA_}
+            args_train = {"tx": X_train, "y": Y_f_train, "initial_w": W_init, "max_iters": f["max_iters"],
+                          "gamma": f["gamma"], "lambda_": f["lambda_"]}
 
-            W, loss_tr = f(**args_train)
+            W, loss_tr = f["function"](**args_train)
 
-            prediction_val = X_val @ W
+            if "Logistic" in f_name:
+                prediction_val = sigmoid(X_val @ W)
+            else:
+                prediction_val = X_val @ W
 
             loss_val = calculate_mse_loss(Y_val, prediction_val)
             loss_array_val[k_iteration, j] = loss_val
@@ -118,13 +149,16 @@ if __name__ == "__main__":
     # get values of best method
     index_best = int(np.argmin(loss_array_val))
     f_best_name = list(IMPLEMENTATIONS.keys())[index_best]
-    f_best = list(IMPLEMENTATIONS.values())[index_best]
+    best = list(IMPLEMENTATIONS.values())[index_best]
+    f_best = best["function"]
     loss_val_best = loss_array_val[index_best]
     print(
         f"[+] Best Method was {f_best_name} with a Validation Loss of {loss_val_best}!")
 
-    args_train = {"tx": X, "y": Y, "initial_w": W_init, "max_iters": MAX_ITERS,
-                  "gamma": GAMMA, "lambda_": LAMBDA_}
+    args_train = {"tx": X, "y": Y, "initial_w": W_init,
+                  "max_iters": best["max_iters"],
+                  "gamma": best["gamma"],
+                  "lambda_": best["lambda_"]}
 
     W_best, _ = f_best(**args_train)
     # generate submission

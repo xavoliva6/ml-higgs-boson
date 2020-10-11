@@ -33,8 +33,8 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma, **kwargs):
         nr = np.random.randint(low=0, high=N)
         tx_s, y_s = tx[nr], y[nr]
         # compute gradient
-        err = y_s - tx_s @ w
-        grad = -tx_s.T * err
+        e = y_s - tx_s @ w
+        grad = -tx_s.T * e
 
         # update w by gradient descent update
         w -= gamma * grad
@@ -49,7 +49,6 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma, **kwargs):
 def least_squares(y, tx, **kwargs):
     """Least squares regression using normal equations"""
     N, D = tx.shape
-
     # compute w using explicit solution
     w = np.linalg.solve(tx.T @ tx, tx.T @ y)
 
@@ -65,11 +64,11 @@ def ridge_regression(y, tx, lambda_, **kwargs):
     N, D = tx.shape
 
     # compute w using explicit solution
-    w = np.linalg.solve(tx.T @ tx + 2 * N * lambda_ * np.identity(D), tx.T @ y)
+    w = np.linalg.solve(tx.T @ tx + lambda_ * np.identity(D), tx.T @ y)
 
     # calculate loss
     y_pred = tx @ w
-    loss = calculate_mse_loss(y, y_pred)
+    loss = calculate_mse_loss(y, y_pred) + lambda_ * w.T @ w
 
     return w, loss
 
@@ -97,12 +96,14 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
 
     w = initial_w
     for n_iter in range(max_iters):
-        grad_reg_log_loss = tx.T @ (sigmoid(tx @ w) - y) + 2 * N * lambda_ * w
+        e = y - sigmoid(tx @ w)
+        grad_reg_log_regression = -1 / N * tx.T @ e + 2 * lambda_ * w
 
         # update w by gradient descent update
-        w -= gamma * grad_reg_log_loss
+        w -= gamma * grad_reg_log_regression
+        print(calculate_logistic_loss(y, tx, w) + lambda_ * w.T @ w)
 
     # calculate final loss
-    loss = calculate_logistic_loss(y, tx, w)
+    loss = calculate_logistic_loss(y, tx, w) + lambda_ * w.T @ w
 
     return w, loss
