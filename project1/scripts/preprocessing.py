@@ -3,7 +3,7 @@ import numpy as np
 
 def data_replacement(X, method="median"):
     """
-    replaces missing data points in either matrices or vectors
+    Replaces missing data points in either matrices or vectors
     different methods: mean
     """
 
