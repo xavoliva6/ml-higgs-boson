@@ -1,3 +1,5 @@
+import matplotlib.pyplot as plt
+
 # display correlation dots in the paired plot
 def corrdot(*args, **kwargs):
     """
