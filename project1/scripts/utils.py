@@ -1,22 +1,23 @@
 import numpy as np
 
-def split_data(X, Y, ids, val_prop=0.3):
-    "Splits data into training and validation"
-    # TODO maybe add randominzation here?
-    X_tr  = X[:int(X.shape[0]*(1-val_prop))]
-    Y_tr  = Y[:int(X.shape[0]*(1-val_prop))]
-    ids_tr  = ids[:int(X.shape[0]*(1-val_prop))]
 
-    X_val  = X[int(X.shape[0]*(1-val_prop)):]
-    Y_val  = Y[int(X.shape[0]*(1-val_prop)):]
-    ids_val  = ids[int(X.shape[0]*(1-val_prop)):]
+def split_data(X, Y, ids, val_prop=0.3):
+    """Splits data into training and validation"""
+    # TODO maybe add randomization here?
+    X_tr = X[:int(X.shape[0] * (1 - val_prop))]
+    Y_tr = Y[:int(X.shape[0] * (1 - val_prop))]
+    ids_tr = ids[:int(X.shape[0] * (1 - val_prop))]
+
+    X_val = X[int(X.shape[0] * (1 - val_prop)):]
+    Y_val = Y[int(X.shape[0] * (1 - val_prop)):]
+    ids_val = ids[int(X.shape[0] * (1 - val_prop)):]
 
     return (X_tr, Y_tr, ids_tr), (X_val, Y_val, ids_val)
 
 
 def calculate_mse(e):
     """Calculate the mse for error vector e."""
-    return 1/2 * np.mean(e**2)
+    return 1 / 2 * np.mean(e ** 2)
 
 
 def calculate_mae(e):
@@ -82,6 +83,6 @@ def build_k_indices(y, k):
     N = y.shape[0]
     fold_interval = int(N / k)
     indices = np.random.permutation(N)
-    k_indices = [indices[k_iteration * fold_interval: (k_iteration+1) * fold_interval] for k_iteration in range(k)]
+    k_indices = [indices[k_iteration * fold_interval: (k_iteration + 1) * fold_interval] for k_iteration in range(k)]
 
     return np.array(k_indices)

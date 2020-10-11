@@ -7,24 +7,6 @@ def data_replacement(X, method="median"):
     different methods: mean
     """
 
-    def fill_vec(vec, method):
-        if method == "mean":
-            # find all missing points
-            missing = vec == -999.
-            # calculate the remaining points mean
-            feature_mean = np.mean(vec[~missing])
-            # fill them up
-            vec[missing] = feature_mean
-            return vec
-        elif method == "median":
-            # find all missing points
-            missing = vec == -999.
-            # calculate the remaining points mean
-            feature_median = np.median(vec[~missing])
-            # fill them up
-            vec[missing] = feature_median
-            return vec
-
     # for  a vector
     if X.ndim == 1:
         return fill_vec(X, method=method)
@@ -34,6 +16,26 @@ def data_replacement(X, method="median"):
         for vec_index, vec in enumerate(X.T):
             X[:, vec_index] = fill_vec(vec, method=method)
         return X
+
+
+def fill_vec(vec, method):
+    # find all missing points
+    missing = vec == -999.
+    feature_method = 0
+
+    if method == "mean":
+        # calculate the remaining points mean
+        feature_method = np.mean(vec[~missing])
+    elif method == "median":
+        # calculate the remaining points median
+        feature_method = np.median(vec[~missing])
+    else:
+        print("Warning: Method not implemented")
+
+    # fill them up
+    vec[missing] = feature_method
+
+    return vec
 
 
 def z_score_outlier_detection(X, thresh=2.5):
@@ -52,7 +54,7 @@ def z_score_outlier_detection(X, thresh=2.5):
     for f_index, feature_vec in enumerate(X.T):
         while True:
             # calculate z scores
-            z_scores = ((feature_vec) - np.mean(feature_vec)) / np.std(feature_vec)
+            z_scores = (feature_vec - np.mean(feature_vec)) / np.std(feature_vec)
             # find all z score above threshold
             outliers = np.abs(z_scores) > thresh
             # if there are none, stop with this feature
@@ -63,4 +65,5 @@ def z_score_outlier_detection(X, thresh=2.5):
             else:
                 feature_vec[outliers] = -999.
                 feature_vec = data_replacement(feature_vec)
+
     return X
