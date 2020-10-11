@@ -1,4 +1,5 @@
 import datetime
+import numpy as np
 
 from utils import split_data, standardize, calculate_mse_loss
 from proj1_helpers import load_csv_data, predict_labels, create_csv_submission
@@ -67,10 +68,13 @@ if __name__ == "__main__":
     f_best_name = list(IMPLEMENTATIONS.keys())[indx_best]
     f_best = list(IMPLEMENTATIONS.values())[indx_best]
     loss_val_best = loss_list_val[indx_best]
-    W_best = W_list[indx_best]
     print("[+] Best Method was ({}) with a Validation Loss of {}!".format(
         f_best_name, loss_val_best))
 
+    args_train = {"tx": X, "y": Y, "initial_w": W_init, "max_iters": max_iters,
+                "gamma": gamma, "lambda_": lambda_}
+
+    W_best, _ = f_best(**args_train)
     # generate submission
     print("[!] Generating Submission...")
     Y_te_predictions = predict_labels(W_best, X_te)
