@@ -1,5 +1,6 @@
 import datetime
 import numpy as np
+import os.path
 
 from utils import split_data, standardize, calculate_mse_loss, cross_validation, build_k_indices
 from proj1_helpers import load_csv_data, predict_labels, create_csv_submission
@@ -8,7 +9,14 @@ from implementations import *
 
 SUBMISSION_PATH = "../data/submissions"
 TRAIN_PATH = "../data/train.csv"
+
 TEST_PATH = "../data/test.csv"
+PREPROCESSED_X = "../data/preprocessed_X.npy"
+PREPROCESSED_Y = "../data/preprocessed_Y.npy"
+PREPROCESSED_X_te = "../data/preprocessed_X_te.npy"
+PREPROCESSED_Y_te = "../data/preprocessed_Y_te.npy"
+
+
 IMPLEMENTATIONS = {"Least Squares Gradient Descent": least_squares_GD,
                    "Least Squares Stochastic GD": least_squares_SGD,
                    "Least Squares using Pseudo-Inverse": least_squares,
@@ -16,22 +24,20 @@ IMPLEMENTATIONS = {"Least Squares Gradient Descent": least_squares_GD,
                    "Logistic Regression": logistic_regression,
                    "Regularized Logistic Regression": reg_logistic_regression}
 
-PREPROCESSED_DATA_PATH_TRAIN = "../data/preprocessed_X_train.npy"
-PREPROCESSED_DATA_PATH_TEST = "../data/preprocessed_X_test.npy"
-PERFORM_PREPROCESSING = True
-
 Z_VALUE = 3.0
-DO_Z_OUTLIER_DETECTION = False
+DO_Z_OUTLIER_DETECTION = True
 
 MAX_ITERS = 100
 GAMMA = .01
 LAMBDA_ = .1
-
+K = 5
+USE_PRE = True
 if __name__ == "__main__":
-    Y, X, ids = load_csv_data(TRAIN_PATH)
-    Y_te, X_te, ids_te = load_csv_data(TEST_PATH)
+    print(os.path.isfile(PREPROCESSED_X))
+    if not (os.path.isfile(PREPROCESSED_X) and USE_PRE):
+        Y, X, ids = load_csv_data(TRAIN_PATH)
+        Y_te, X_te, ids_te = load_csv_data(TEST_PATH)
 
-    if PERFORM_PREPROCESSING:
         # perform preprocessing TODO seems to make it worse
         if DO_Z_OUTLIER_DETECTION:
             X = z_score_outlier_detection(X, thresh=Z_VALUE)
@@ -49,16 +55,21 @@ if __name__ == "__main__":
         X = add_ones_column(X)
         X_te = add_ones_column(X_te)
 
-        np.save(PREPROCESSED_DATA_PATH_TRAIN, X)
-        np.save(PREPROCESSED_DATA_PATH_TEST, X_te)
+        np.save(PREPROCESSED_X, X, allow_pickle=True)
+        np.save(PREPROCESSED_X_te, X_te, allow_pickle=True)
+        np.save(PREPROCESSED_Y, Y, allow_pickle=True)
+        np.save(PREPROCESSED_Y_te, Y_te, allow_pickle=True)
+        print("[*] Saved Preprocessed Data")
     else:
-        X = np.load(PREPROCESSED_DATA_PATH_TRAIN)
-        X_te = np.load(PREPROCESSED_DATA_PATH_TEST)
+        print("[*] Using Saved Data")
+        X = np.load(PREPROCESSED_X)
+        X_te = np.load(PREPROCESSED_X_te)
+        Y = np.load(PREPROCESSED_Y)
+        Y_te = np.load(PREPROCESSED_Y_te)
 
     N, D = X.shape
 
     # Cross-validation
-    K = 5
     k_indices = build_k_indices(Y, K)
 
     nr_functions = len(IMPLEMENTATIONS.items())
@@ -70,7 +81,7 @@ if __name__ == "__main__":
         X_train, Y_train, X_val, Y_val = cross_validation(Y, X, k_indices, k_iteration)
 
         for j, [f_name, f] in enumerate(IMPLEMENTATIONS.items()):
-            print(f"[!] Starting {f_name}...")
+            print("[!] Starting {}...".format(f_name))
 
             args_train = {"tx": X_train, "y": Y_train, "initial_w": W_init, "max_iters": MAX_ITERS,
                           "gamma": GAMMA, "lambda_": LAMBDA_}
@@ -80,6 +91,7 @@ if __name__ == "__main__":
             prediction_val = X_val @ W
 
             loss_val = calculate_mse_loss(Y_val, prediction_val)
+            print(loss_val)
             loss_array_val[k_iteration, j] = loss_val
 
             print(f"\t [==>] Validation Loss: {loss_val}")
