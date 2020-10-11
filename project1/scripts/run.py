@@ -1,12 +1,14 @@
 import datetime
 import numpy as np
 import os.path
-np.random.seed(0)
 
-from utils import split_data, standardize, calculate_mse_loss, cross_validation, build_k_indices
+from utils import calculate_mse_loss, cross_validation, build_k_indices
 from proj1_helpers import load_csv_data, predict_labels, create_csv_submission
-from preprocessing import z_score_outlier_detection, add_ones_column, augment_features_polynomial
+from preprocessing import z_score_outlier_detection, add_ones_column, \
+    augment_features_polynomial, standardize, split_data
 from implementations import *
+
+np.random.seed(0)
 
 SUBMISSION_PATH = "../data/submissions"
 TRAIN_PATH = "../data/train.csv"
@@ -18,12 +20,14 @@ PREPROCESSED_X_te = "../data/preprocessed_X_te.npy"
 PREPROCESSED_Y_te = "../data/preprocessed_Y_te.npy"
 PREPROCESSED_ids_te = "../data/preprocessed_ids_te.npy"
 
-IMPLEMENTATIONS = {"Least Squares Gradient Descent": least_squares_GD,
-                   "Least Squares Stochastic GD": least_squares_SGD,
-                   "Least Squares using Pseudo-Inverse": least_squares,
-                   "Ridge Regression": ridge_regression,
-                   "Logistic Regression": logistic_regression,
-                   "Regularized Logistic Regression": reg_logistic_regression}
+IMPLEMENTATIONS = {
+    "Least Squares Gradient Descent": least_squares_GD,
+    "Least Squares Stochastic GD": least_squares_SGD,
+    "Least Squares using Pseudo-Inverse": least_squares,
+    "Ridge Regression": ridge_regression,
+    "Logistic Regression": logistic_regression,
+    "Regularized Logistic Regression": reg_logistic_regression
+}
 
 Z_VALUE = 3.0
 DO_Z_OUTLIER_DETECTION = True
@@ -80,12 +84,13 @@ if __name__ == "__main__":
     W_init = np.random.rand(D, )
 
     for k_iteration in range(K):
-        print(f"{k_iteration + 1}. Iteration of cross validation...\n")
-        X_train, Y_train, X_val, Y_val = cross_validation(Y, X, k_indices, k_iteration)
+        print(f"{k_iteration + 1}. Iteration of cross validation...")
+        X_train, Y_train, X_val, Y_val = cross_validation(
+            Y, X, k_indices, k_iteration)
 
         for j, [f_name, f] in enumerate(IMPLEMENTATIONS.items()):
-            print("[!] Starting {}...".format(f_name))
-
+            print(f"[!] Starting {f_name}...")
+            W_init = np.random.rand(D, )
             args_train = {"tx": X_train, "y": Y_train, "initial_w": W_init, "max_iters": MAX_ITERS,
                           "gamma": GAMMA, "lambda_": LAMBDA_}
 
@@ -94,11 +99,10 @@ if __name__ == "__main__":
             prediction_val = X_val @ W
 
             loss_val = calculate_mse_loss(Y_val, prediction_val)
-
             loss_array_val[k_iteration, j] = loss_val
 
-            print(f"\t [==>] Validation Loss: {loss_val}")
-        print("#########################################################################################\n")
+            print(f"\t [==>] Validation Loss: {loss_val:.2f}")
+        print("#########################################################################################")
 
     loss_array_val = np.mean(loss_array_val, axis=0)
 
@@ -107,7 +111,8 @@ if __name__ == "__main__":
     f_best_name = list(IMPLEMENTATIONS.keys())[index_best]
     f_best = list(IMPLEMENTATIONS.values())[index_best]
     loss_val_best = loss_array_val[index_best]
-    print(f"[+] Best Method was {f_best_name} with a Validation Loss of {loss_val_best}!")
+    print(
+        f"[+] Best Method was {f_best_name} with a Validation Loss of {loss_val_best}!")
 
     args_train = {"tx": X, "y": Y, "initial_w": W_init, "max_iters": MAX_ITERS,
                   "gamma": GAMMA, "lambda_": LAMBDA_}
@@ -119,6 +124,6 @@ if __name__ == "__main__":
 
     date_time = datetime.datetime.now().strftime("%m_%d_%Y-%H_%M")
     # TODO replace whitespaces in function names
-    csv_name = f"HB_SUBMISSION_{loss_val_best}_{date_time}_{f_best_name}.csv"
+    csv_name = f"HB_SUBMISSION_{loss_val_best:.2f}_{date_time}_{f_best_name}.csv"
     create_csv_submission(ids_te, Y_te_predictions, csv_name, SUBMISSION_PATH)
     print(f"[+] Submission {csv_name} was generated!")

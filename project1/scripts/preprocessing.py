@@ -1,6 +1,39 @@
 import numpy as np
 
 
+def feature_scale(X):
+    """Feature scaling"""
+    min_X = np.min(X, axis=0)
+    max_X = np.max(X, axis=0)
+    X_norm = (X - min_X) / (max_X - min_X)
+
+    return X_norm
+
+
+def standardize(X):
+    """Standardization"""
+    mean = np.mean(X, axis=0)
+    std = np.std(X, axis=0)
+
+    X_stand = (X - mean) / std
+
+    return X_stand
+
+
+def split_data(X, Y, ids, val_prop=0.3):
+    """Splits data into training and validation"""
+    # TODO maybe add randomization here?
+    X_tr = X[:int(X.shape[0] * (1 - val_prop))]
+    Y_tr = Y[:int(X.shape[0] * (1 - val_prop))]
+    ids_tr = ids[:int(X.shape[0] * (1 - val_prop))]
+
+    X_val = X[int(X.shape[0] * (1 - val_prop)):]
+    Y_val = Y[int(X.shape[0] * (1 - val_prop)):]
+    ids_val = ids[int(X.shape[0] * (1 - val_prop)):]
+
+    return (X_tr, Y_tr, ids_tr), (X_val, Y_val, ids_val)
+
+
 def data_replacement(X, method="median"):
     """
     Replaces missing data points in either matrices or vectors

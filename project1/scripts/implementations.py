@@ -14,7 +14,7 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
         grad = - 1 / N * tx.T @ e
 
         # update w by gradient descent update
-        w = w - gamma * grad
+        w -= gamma * grad
 
     # calculate final loss
     y_pred = tx @ w
@@ -37,7 +37,7 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma, **kwargs):
         grad = -tx_s.T * err
 
         # update w by gradient descent update
-        w = w - gamma * grad
+        w -= gamma * grad
 
     # calculate loss
     y_pred = tx @ w
@@ -80,10 +80,10 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, **kwargs):
 
     w = initial_w
     for n_iter in range(max_iters):
-        grad_log_loss = tx.T @ (sigmoid(tx @ w) - y)
-
+        e = y - sigmoid(tx @ w)
+        grad_log_regression = -1 / N * tx.T @ e
         # update w by gradient descent update
-        w = w - gamma * grad_log_loss
+        w -= gamma * grad_log_regression
 
     # calculate final loss
     loss = calculate_logistic_loss(y, tx, w)
@@ -100,7 +100,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
         grad_reg_log_loss = tx.T @ (sigmoid(tx @ w) - y) + 2 * N * lambda_ * w
 
         # update w by gradient descent update
-        w = w - gamma * grad_reg_log_loss
+        w -= gamma * grad_reg_log_loss
 
     # calculate final loss
     loss = calculate_logistic_loss(y, tx, w)
