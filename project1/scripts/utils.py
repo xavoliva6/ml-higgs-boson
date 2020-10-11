@@ -80,9 +80,10 @@ def cross_validation(y, x, k_indices, k_iteration):
 
 def build_k_indices(y, k):
     """build k indices for k-fold cross-validation."""
-    N = y.shape[0]
+    N = len(y)
     fold_interval = int(N / k)
     indices = np.random.permutation(N)
     k_indices = [indices[k_iteration * fold_interval: (k_iteration + 1) * fold_interval] for k_iteration in range(k)]
 
     return np.array(k_indices)
+    

@@ -74,6 +74,7 @@ def add_ones_column(X):
 
 
 def augment_features_polynomial(X, M):
+    # TODO: add other types of feature expansions
     """Augment the input with a polynomial basis (of arbitrary degree M )"""
     if M < 2:
         return X
