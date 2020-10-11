@@ -21,18 +21,18 @@ PREPROCESSED_Y_te = "../data/preprocessed_Y_te.npy"
 PREPROCESSED_ids_te = "../data/preprocessed_ids_te.npy"
 
 IMPLEMENTATIONS = {
-    "Least Squares Gradient Descent": least_squares_GD,
-    "Least Squares Stochastic GD": least_squares_SGD,
-    "Least Squares using Pseudo-Inverse": least_squares,
-    "Ridge Regression": ridge_regression,
+    # "Least Squares Gradient Descent": least_squares_GD,
+    # "Least Squares Stochastic GD": least_squares_SGD,
+    # "Least Squares using Pseudo-Inverse": least_squares,
+    # "Ridge Regression": ridge_regression,
     "Logistic Regression": logistic_regression,
-    "Regularized Logistic Regression": reg_logistic_regression
+    # "Regularized Logistic Regression": reg_logistic_regression
 }
 
 Z_VALUE = 3.0
 DO_Z_OUTLIER_DETECTION = True
 
-MAX_ITERS = 100
+MAX_ITERS = 1000
 GAMMA = .01
 LAMBDA_ = .1
 K = 5
@@ -88,10 +88,19 @@ if __name__ == "__main__":
         X_train, Y_train, X_val, Y_val = cross_validation(
             Y, X, k_indices, k_iteration)
 
+        # convert from {-1, 1} to {0, 1} for logistic regression
+        Y_log_train = ((Y_train + 1) / 2).astype(int)
+
         for j, [f_name, f] in enumerate(IMPLEMENTATIONS.items()):
             print(f"[!] Starting {f_name}...")
             W_init = np.random.rand(D, )
-            args_train = {"tx": X_train, "y": Y_train, "initial_w": W_init, "max_iters": MAX_ITERS,
+
+            if "Logistic" in f_name:
+                Y_f_train = Y_log_train
+            else:
+                Y_f_train = Y_train
+
+            args_train = {"tx": X_train, "y": Y_f_train, "initial_w": W_init, "max_iters": MAX_ITERS,
                           "gamma": GAMMA, "lambda_": LAMBDA_}
 
             W, loss_tr = f(**args_train)

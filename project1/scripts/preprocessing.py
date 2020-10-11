@@ -1,7 +1,6 @@
 import numpy as np
 
 
-<<<<<<< Updated upstream
 def feature_scale(X):
     """Feature scaling"""
     min_X = np.min(X, axis=0)
@@ -34,7 +33,7 @@ def split_data(X, Y, ids, val_prop=0.3):
 
     return (X_tr, Y_tr, ids_tr), (X_val, Y_val, ids_val)
 
-=======
+
 def corr_filter(X, threshold):
     n = X.shape[1]
     columns = np.ones((n,))
@@ -45,8 +44,7 @@ def corr_filter(X, threshold):
                 if correlation >= threshold:
                     columns[j] = 0
     return columns
-    
->>>>>>> Stashed changes
+
 
 def data_replacement(X, method="median"):
     """
@@ -121,7 +119,8 @@ def add_ones_column(X):
 
 
 def augment_features_polynomial(X, M):
-    """Augment the input with a polynomial basis (of arbitrary degree M )"""
+    """Augment the input with a polynomial basis (of arbitrary degree M)"""
+    # TODO: add other types of feature expansions
     if M < 2:
         return X
 
