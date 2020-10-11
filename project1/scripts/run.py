@@ -6,7 +6,7 @@ from proj1_helpers import load_csv_data, predict_labels, create_csv_submission
 from preprocessing import z_score_outlier_detection, add_ones_column, augment_features_polynomial
 from implementations import *
 
-SUBMISSION_PATH = "submissions"
+SUBMISSION_PATH = "../data/submissions"
 TRAIN_PATH = "../data/train.csv"
 TEST_PATH = "../data/test.csv"
 IMPLEMENTATIONS = {"Least Squares Gradient Descent": least_squares_GD,
@@ -16,7 +16,7 @@ IMPLEMENTATIONS = {"Least Squares Gradient Descent": least_squares_GD,
                    "Logistic Regression": logistic_regression,
                    "Regularized Logistic Regression": reg_logistic_regression}
 
-PREPROCESSED_DATA_PATH_TRAIN = "../data/preprocessed_X.npy"
+PREPROCESSED_DATA_PATH_TRAIN = "../data/preprocessed_X_train.npy"
 PREPROCESSED_DATA_PATH_TEST = "../data/preprocessed_X_test.npy"
 PERFORM_PREPROCESSING = True
 
