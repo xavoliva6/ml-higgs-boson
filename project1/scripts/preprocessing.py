@@ -39,15 +39,16 @@ def split_data(X, Y, ids, val_prop=0.3):
 
 def corr_filter(X, threshold):
     D = X.shape[1]
-    columns = np.ones(shape=(D - 1,))
+    columns_to_keep = np.ones(shape=(D,), dtype=bool)
 
     for i in range(D - 1):
         for j in range(i + 1, D):
-            if columns[j] == 1:
+            if columns_to_keep[j]:
                 correlation = np.abs(np.corrcoef(X[:, i], X[:, j])[0, 1])
                 if correlation >= threshold:
-                    columns[j] = 0
-    return columns
+                    columns_to_keep[j] = False
+
+    return X[:, columns_to_keep], columns_to_keep
 
 
 def data_replacement(X, method="median"):

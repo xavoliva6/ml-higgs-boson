@@ -6,7 +6,7 @@ from collections import defaultdict
 from utils import calculate_mse_loss, cross_validation, build_k_indices
 from proj1_helpers import load_csv_data, predict_labels, create_csv_submission
 from preprocessing import z_score_outlier_detection, add_ones_column, \
-    augment_features_polynomial, standardize, split_data
+    augment_features_polynomial, standardize, split_data, corr_filter
 from implementations import *
 
 np.random.seed(0)
@@ -64,7 +64,7 @@ Z_VALUE = 3.0
 DO_Z_OUTLIER_DETECTION = True
 
 K = 5
-USE_PRE = True
+USE_PRE = False
 
 if __name__ == "__main__":
     if not (os.path.isfile(PREPROCESSED_X) and USE_PRE):
@@ -76,9 +76,12 @@ if __name__ == "__main__":
             X = z_score_outlier_detection(X, thresh=Z_VALUE)
             X_te = z_score_outlier_detection(X_te, thresh=Z_VALUE)
 
+        X, columns_to_keep = corr_filter(X, threshold=0.95)
+        X_te = X_te[:, columns_to_keep]
+
         # Augment feature vector
-        X = augment_features_polynomial(X, M=4)
-        X_te = augment_features_polynomial(X_te, M=4)
+        # X = augment_features_polynomial(X, M=4)
+        # X_te = augment_features_polynomial(X_te, M=4)
 
         # standardize features
         X = standardize(X)
