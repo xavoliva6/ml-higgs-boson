@@ -4,7 +4,22 @@ from utils import *
 
 
 def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
-    """Linear regression using gradient descent"""
+    """
+    A short description.
+
+    A bit longer description.
+
+    Args:
+        variable (type): description
+
+    Returns:
+        type: description
+
+    Raises:
+        Exception: description
+
+    """
+
     N, D = tx.shape
     w = initial_w
 
@@ -24,7 +39,22 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
 
 
 def least_squares_SGD(y, tx, initial_w, max_iters, gamma, **kwargs):
-    """Linear regression using stochastic gradient descent"""
+    """
+    A short description.
+
+    A bit longer description.
+
+    Args:
+        variable (type): description
+
+    Returns:
+        type: description
+
+    Raises:
+        Exception: description
+
+    """
+
     N, D = tx.shape
     w = initial_w
 
@@ -47,7 +77,22 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma, **kwargs):
 
 
 def least_squares(y, tx, **kwargs):
-    """Least squares regression using normal equations"""
+    """
+    A short description.
+
+    A bit longer description.
+
+    Args:
+        variable (type): description
+
+    Returns:
+        type: description
+
+    Raises:
+        Exception: description
+
+    """
+
     N, D = tx.shape
     # compute w using explicit solution
     w = np.linalg.solve(tx.T @ tx, tx.T @ y)
@@ -60,7 +105,22 @@ def least_squares(y, tx, **kwargs):
 
 
 def ridge_regression(y, tx, lambda_, **kwargs):
-    """Ridge regression using normal equations"""
+    """
+    A short description.
+
+    A bit longer description.
+
+    Args:
+        variable (type): description
+
+    Returns:
+        type: description
+
+    Raises:
+        Exception: description
+
+    """
+
     N, D = tx.shape
 
     # compute w using explicit solution
@@ -74,7 +134,22 @@ def ridge_regression(y, tx, lambda_, **kwargs):
 
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma, **kwargs):
-    """Logistic regression using gradient descent or SGD"""
+    """
+    A short description.
+
+    A bit longer description.
+
+    Args:
+        variable (type): description
+
+    Returns:
+        type: description
+
+    Raises:
+        Exception: description
+
+    """
+
     N, D = tx.shape
 
     w = initial_w
@@ -91,7 +166,22 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, **kwargs):
 
 
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
-    """Regularized logistic regression using gradient descent or SGD"""
+    """
+    A short description.
+
+    A bit longer description.
+
+    Args:
+        variable (type): description
+
+    Returns:
+        type: description
+
+    Raises:
+        Exception: description
+
+    """
+
     N, D = tx.shape
 
     w = initial_w
@@ -101,7 +191,6 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
 
         # update w by gradient descent update
         w -= gamma * grad_reg_log_regression
-        print(calculate_logistic_loss(y, tx, w) + lambda_ * w.T @ w)
 
     # calculate final loss
     loss = calculate_logistic_loss(y, tx, w) + lambda_ * w.T @ w

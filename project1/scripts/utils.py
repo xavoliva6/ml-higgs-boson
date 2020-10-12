@@ -1,5 +1,9 @@
 import numpy as np
 
+def calculate_acc(y, y_pred):
+    y_pred[y_pred < 0] = -1
+    y_pred[y_pred >= 0] = 1
+    return ((y*y_pred)>0).sum()/y.shape[0]
 
 def calculate_mse(e):
     """Calculate the mse for error vector e."""
@@ -30,7 +34,7 @@ def calculate_logistic_loss(y, tx, w):
     # https://ml-cheatsheet.readthedocs.io/en/latest/logistic_regression.html
     # https://stackoverflow.com/questions/38125319/python-divide-by-zero-encountered-in-log-logistic-regression
     loss = -1 / N * (y.T @ np.log(pred + epsilon) + (1 - y).T @ np.log(1 - pred + epsilon))
-    
+
     return loss
 
 
