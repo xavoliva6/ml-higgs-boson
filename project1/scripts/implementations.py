@@ -19,7 +19,7 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
         float: final loss
 
     Raises:
-        Exception: description
+        ValueError: If the weights get too big
     """
 
     N, D = tx.shape
@@ -32,6 +32,9 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
 
         # update w by gradient descent update
         w -= gamma * grad
+
+        if np.max(w) > 1e4:
+            raise ValueError('Least Squares GD diverged!!!')
 
     # calculate final loss
     y_pred = tx @ w
@@ -56,7 +59,7 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma, **kwargs):
         float: final loss
 
     Raises:
-        Exception: description
+        ValueError: If the weights get too big
     """
 
     N, D = tx.shape
@@ -72,6 +75,9 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma, **kwargs):
 
         # update w by gradient descent update
         w -= gamma * grad
+
+        if np.max(w) > 1e4:
+            raise ValueError('Least Squares SGD diverged!!!')
 
     # calculate loss
     y_pred = tx @ w
@@ -152,7 +158,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, **kwargs):
         float: final loss
 
     Raises:
-        Exception: description
+        ValueError: If the weights get too big
     """
 
     N, D = tx.shape
@@ -163,6 +169,9 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, **kwargs):
         grad_log_regression = -1 / N * tx.T @ e
         # update w by gradient descent update
         w -= gamma * grad_log_regression
+
+        if np.max(w) > 1e4:
+            raise ValueError('Logistic Regression diverged!!!')
 
     # calculate final loss
     loss = calculate_logistic_loss(y, tx, w)
@@ -187,7 +196,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
         float: final loss
 
     Raises:
-        Exception: description
+        ValueError: If the weights get too big
     """
 
     N, D = tx.shape
@@ -199,6 +208,9 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
 
         # update w by gradient descent update
         w -= gamma * grad_reg_log_regression
+
+        if np.max(w) > 1e4:
+            raise ValueError('Regularized Logistic Regression diverged!!!')
 
     # calculate final loss
     loss = calculate_logistic_loss(y, tx, w) + lambda_ * w.T @ w
@@ -225,7 +237,7 @@ def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_):
         float: final loss
 
     Raises:
-        Exception: description
+        ValueError: If the weights get too big
     """
     N, D = tx.shape
     w = initial_w
@@ -242,7 +254,9 @@ def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_):
 
         # update w by gradient descent update
         w -= gamma * grad
-        print(calculate_hinge_loss(y, tx, w) + lambda_ / 2 * np.sum(w ** 2))
+
+        if np.max(w) > 1e4:
+            raise ValueError('Support Vector Machine diverged!!!')
 
     # calculate final loss
     loss = calculate_hinge_loss(y, tx, w) + lambda_ / 2 * np.sum(w ** 2)
