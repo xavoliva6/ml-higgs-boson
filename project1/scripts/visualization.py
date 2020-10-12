@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 
+
 # display correlation dots in the paired plot
-def corrdot(*args, **kwargs):
+def corr_dot(*args, **kwargs):
     """
     Calculate the correlation of features and display it:
     positive correlation displayed with red colours,
@@ -17,5 +18,5 @@ def corrdot(*args, **kwargs):
     ax.scatter([.5], [.5], marker_size, [corr_r], alpha=0.6, cmap="coolwarm",
                vmin=-1, vmax=1, transform=ax.transAxes)
     font_size = abs(corr_r) * 40 + 5
-    ax.annotate(corr_text, [.5, .5,],  xycoords="axes fraction",
+    ax.annotate(corr_text, [.5, .5, ], xycoords="axes fraction",
                 ha='center', va='center', fontsize=font_size)

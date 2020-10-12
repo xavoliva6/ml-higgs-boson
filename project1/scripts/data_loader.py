@@ -4,8 +4,10 @@ import zipfile
 import requests
 
 from proj1_helpers import load_csv_data
-from preprocessing import standardize, add_bias, augment_features_polynomial, SMOTE, remove_redundant, split_groups
-from global_variables import *
+from preprocessing import standardize, add_bias, augment_features_polynomial, SMOTE, split_groups,\
+    z_score_outlier_detection, corr_filter
+import config
+
 
 def download_url(url, save_path, chunk_size=128):
     """
@@ -14,21 +16,21 @@ def download_url(url, save_path, chunk_size=128):
     Args:
         url (string): url to file to be downloaded
         save_path (string): path to save file
-        chunk_size (int): size of chunk for donwload
+        chunk_size (int): size of chunk for download
     """
 
-    print("[*] Downloading from [{}]".format(url))
+    print(f"[*] Downloading from [{url}]")
     r = requests.get(url, stream=True)
-    with open(save_path+".zip", 'wb') as fd:
+    with open(save_path + ".zip", 'wb') as fd:
         for chunk in r.iter_content(chunk_size=chunk_size):
             fd.write(chunk)
-    print("[*] Uncompressing to [{}]".format(save_path))
-    with zipfile.ZipFile(save_path+".zip", 'r') as zip_ref:
-        zip_ref.extractall(DATA_PATH)
+    print(f"[*] Uncompressing to [{save_path}]")
+    with zipfile.ZipFile(f"{save_path}.zip", 'r') as zip_ref:
+        zip_ref.extractall(config.DATA_PATH)
 
 
 def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
-                feature_expansion=False, correlation_analysis=False, apply_SMOTE=False):
+             feature_expansion=False, correlation_analysis=False, apply_SMOTE=False):
     """
     Data supplying function.
 
@@ -38,7 +40,7 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
     preprocessing algorithms, etc...
 
     Args:
-        use_preexisting (bool): if existent, enalbing this parameters will allow
+        use_preexisting (bool): if existent, enabling this parameters will allow
                                 the function to use previously preprocessed and
                                 saved data files
         save_preprocessed (bool): enabling this parameters will allow the
@@ -51,9 +53,8 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
         correlation_analysis (bool): enabling this parameters will allow the
                                         function to perform correlation analysis
                                         and remove highly correlated features
-        apply_SMOTE (bool): enabling this parameters will allow the funciton to
-                            perform SMOTE (Synthetic Minority Oversampling
-                            TEchnique)
+        apply_SMOTE (bool): enabling this parameters will allow the function to
+                            perform SMOTE (Synthetic Minority Oversampling Technique)
 
     Returns:
         list: groups of training samples
@@ -66,28 +67,29 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
 
     """
 
-    if (os.path.isdir(DATA_PATH) and os.path.isdir(PREPROCESSED_PATH) and use_preexisting):
+    if os.path.isdir(config.DATA_PATH) and os.path.isdir(config.PREPROCESSED_PATH) and use_preexisting:
         print("[*] Using previously preprocessed Data")
-        groups_tr_X = np.load(PREPROCESSED_X_TR_GROUPS_NPY, allow_pickle=True)
-        groups_tr_Y = np.load(PREPROCESSED_Y_TR_GROUPS_NPY, allow_pickle=True)
-        indc_list_tr = np.load(PREPROCESSED_GROUP_INDX_TR_NPY, allow_pickle=True)
-        groups_te_X = np.load(PREPROCESSED_X_TE_GROUPS_NPY, allow_pickle=True)
-        groups_te_Y = np.load(PREPROCESSED_Y_TE_GROUPS_NPY, allow_pickle=True)
-        indc_list_te = np.load(PREPROCESSED_GROUP_INDX_TE_NPY, allow_pickle=True)
-        ids_te = np.load(PREPROCESSED_IDS_TE_GROUPS_NPY, allow_pickle=True)
+        groups_tr_X = np.load(config.PREPROCESSED_X_TR_GROUPS_NPY, allow_pickle=True)
+        groups_tr_Y = np.load(config.PREPROCESSED_Y_TR_GROUPS_NPY, allow_pickle=True)
+        indc_list_tr = np.load(config.PREPROCESSED_GROUP_INDEX_TR_NPY, allow_pickle=True)
+        groups_te_X = np.load(config.PREPROCESSED_X_TE_GROUPS_NPY, allow_pickle=True)
+        groups_te_Y = np.load(config.PREPROCESSED_Y_TE_GROUPS_NPY, allow_pickle=True)
+        indc_list_te = np.load(config.PREPROCESSED_GROUP_INDEX_TE_NPY, allow_pickle=True)
+        ids_te = np.load(config.PREPROCESSED_IDS_TE_GROUPS_NPY, allow_pickle=True)
 
     else:
         print("[*] Creating preprocessed Data")
 
-        if not (os.path.isdir(DATA_PATH) and os.path.isfile(TRAIN_DATA_CSV_PATH) and os.path.isfile(TEST_DATA_CSV_PATH)):
-            if not (os.path.isdir(DATA_PATH)):
-                os.mkdir(DATA_PATH)
-            download_url(TRAIN_URL, TRAIN_DATA_CSV_PATH)
-            download_url(TEST_URL, TEST_DATA_CSV_PATH)
+        if not (os.path.isdir(config.DATA_PATH) and os.path.isfile(config.TRAIN_DATA_CSV_PATH) and os.path.isfile(
+                config.TEST_DATA_CSV_PATH)):
+            if not (os.path.isdir(config.DATA_PATH)):
+                os.mkdir(config.DATA_PATH)
+            download_url(config.TRAIN_URL, config.TRAIN_DATA_CSV_PATH)
+            download_url(config.TEST_URL, config.TEST_DATA_CSV_PATH)
 
         # load data from csv files
-        Y_tr, X_tr, ids_tr = load_csv_data(TRAIN_DATA_CSV_PATH)
-        Y_te, X_te, ids_te = load_csv_data(TEST_DATA_CSV_PATH)
+        Y_tr, X_tr, ids_tr = load_csv_data(config.TRAIN_DATA_CSV_PATH)
+        Y_te, X_te, ids_te = load_csv_data(config.TEST_DATA_CSV_PATH)
 
         groups_tr_Y, groups_tr_X, indc_list_tr = split_groups(Y_tr, X_tr)
         groups_te_Y, groups_te_X, indc_list_te = split_groups(Y_te, X_te)
@@ -95,8 +97,8 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
         for indx in range(len(indc_list_tr)):
             # perform z outlier detection
             if z_outlier:
-                groups_tr_X[indx] = z_score_outlier_detection(groups_tr_X[indx], thresh=Z_VALUE)
-                groups_te_X[indx] = z_score_outlier_detection(groups_te_X[indx], thresh=Z_VALUE)
+                groups_tr_X[indx] = z_score_outlier_detection(groups_tr_X[indx], thresh=config.Z_VALUE)
+                groups_te_X[indx] = z_score_outlier_detection(groups_te_X[indx], thresh=config.Z_VALUE)
             # perform correlation analysis
             if correlation_analysis:
                 groups_tr_X[indx], columns_to_keep = corr_filter(groups_tr_X[indx], threshold=0.95)
@@ -118,21 +120,23 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
             groups_tr_X[indx] = add_bias(groups_tr_X[indx])
             groups_te_X[indx] = add_bias(groups_te_X[indx])
 
-            print("\t [+]Group {} finished!".format(indx+1))
+            print(f"\t [+]Group {indx + 1} finished!")
 
-        if (save_preprocessed):
-            if not (os.path.isdir(PREPROCESSED_PATH)):
-                os.mkdir(PREPROCESSED_PATH)
-            np.save(PREPROCESSED_X_TR_GROUPS_NPY, groups_tr_X, allow_pickle=True)
-            np.save(PREPROCESSED_Y_TR_GROUPS_NPY, groups_tr_Y, allow_pickle=True)
-            np.save(PREPROCESSED_X_TE_GROUPS_NPY, groups_te_X, allow_pickle=True)
-            np.save(PREPROCESSED_Y_TE_GROUPS_NPY, groups_te_Y, allow_pickle=True)
-            np.save(PREPROCESSED_GROUP_INDX_TR_NPY, indc_list_tr, allow_pickle=True)
-            np.save(PREPROCESSED_GROUP_INDX_TE_NPY, indc_list_te, allow_pickle=True)
-            np.save(PREPROCESSED_IDS_TE_GROUPS_NPY, ids_te, allow_pickle=True)
+        if save_preprocessed:
+            if not os.path.isdir(config.PREPROCESSED_PATH):
+                os.mkdir(config.PREPROCESSED_PATH)
+
+            np.save(config.PREPROCESSED_X_TR_GROUPS_NPY, groups_tr_X, allow_pickle=True)
+            np.save(config.PREPROCESSED_Y_TR_GROUPS_NPY, groups_tr_Y, allow_pickle=True)
+            np.save(config.PREPROCESSED_X_TE_GROUPS_NPY, groups_te_X, allow_pickle=True)
+            np.save(config.PREPROCESSED_Y_TE_GROUPS_NPY, groups_te_Y, allow_pickle=True)
+            np.save(config.PREPROCESSED_GROUP_INDEX_TR_NPY, indc_list_tr, allow_pickle=True)
+            np.save(config.PREPROCESSED_GROUP_INDEX_TE_NPY, indc_list_te, allow_pickle=True)
+            np.save(config.PREPROCESSED_IDS_TE_GROUPS_NPY, ids_te, allow_pickle=True)
             print("[+] Saved Preprocessed Data")
 
     return groups_tr_X, groups_tr_Y, indc_list_tr, groups_te_X, groups_te_Y, indc_list_te, ids_te
 
-if __name__=="__main__":
-    a,b,c,d,e,f,g = get_data()
+
+if __name__ == "__main__":
+    a, b, c, d, e, f, g = get_data()

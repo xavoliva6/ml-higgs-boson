@@ -1,23 +1,25 @@
 import numpy as np
 
-from utils import *
+from utils import calculate_mse_loss, sigmoid, calculate_logistic_loss
 
 
 def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
     """
-    A short description.
-
-    A bit longer description.
+    Linear regression using gradient descent.
 
     Args:
-        variable (type): description
+        y (ndarray): 1D array containing labels
+        tx (ndarray): 2D array containing dataset
+        initial_w (type): initialized weights
+        max_iters (int): maximum number of iterations of the algorithm
+        gamma (float): Step size of the gradient descent
 
     Returns:
-        type: description
+        ndarray: final weights
+        float: final loss
 
     Raises:
         Exception: description
-
     """
 
     N, D = tx.shape
@@ -40,19 +42,21 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
 
 def least_squares_SGD(y, tx, initial_w, max_iters, gamma, **kwargs):
     """
-    A short description.
-
-    A bit longer description.
+    Linear regression using stochastic gradient descent.
 
     Args:
-        variable (type): description
+        y (ndarray): 1D array containing labels
+        tx (ndarray): 2D array containing dataset
+        initial_w (type): initialized weights
+        max_iters (int): maximum number of iterations of the algorithm
+        gamma (float): step size of the gradient descent
 
     Returns:
-        type: description
+        ndarray: final weights
+        float: final loss
 
     Raises:
         Exception: description
-
     """
 
     N, D = tx.shape
@@ -78,19 +82,18 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma, **kwargs):
 
 def least_squares(y, tx, **kwargs):
     """
-    A short description.
-
-    A bit longer description.
+    Least squares regression computed using the pseudo-inverse.
 
     Args:
-        variable (type): description
+        y (ndarray): 1D array containing labels
+        tx (ndarray): 2D array containing dataset
 
     Returns:
-        type: description
+        ndarray: final weights
+        float: final loss
 
     Raises:
         Exception: description
-
     """
 
     N, D = tx.shape
@@ -106,19 +109,19 @@ def least_squares(y, tx, **kwargs):
 
 def ridge_regression(y, tx, lambda_, **kwargs):
     """
-    A short description.
-
-    A bit longer description.
+    Ridge regression computed using the regularized pseudo-inverse.
 
     Args:
-        variable (type): description
+        y (ndarray): 1D array containing labels
+        tx (ndarray): 2D array containing dataset
+        lambda_ (float): regularization parameter
 
     Returns:
-        type: description
+        ndarray: final weights
+        float: final loss
 
     Raises:
         Exception: description
-
     """
 
     N, D = tx.shape
@@ -135,19 +138,21 @@ def ridge_regression(y, tx, lambda_, **kwargs):
 
 def logistic_regression(y, tx, initial_w, max_iters, gamma, **kwargs):
     """
-    A short description.
-
-    A bit longer description.
+    Logistic regression using gradient descent.
 
     Args:
-        variable (type): description
+        y (ndarray): 1D array containing labels
+        tx (ndarray): 2D array containing dataset
+        initial_w (type): initialized weights
+        max_iters (int): maximum number of iterations of the algorithm
+        gamma (float): step size of the gradient descent
 
     Returns:
-        type: description
+        ndarray: final weights
+        float: final loss
 
     Raises:
         Exception: description
-
     """
 
     N, D = tx.shape
@@ -167,19 +172,22 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, **kwargs):
 
 def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
     """
-    A short description.
-
-    A bit longer description.
+    Regularized logistic regression using gradient descent.
 
     Args:
-        variable (type): description
+        y (ndarray): 1D array containing labels
+        tx (ndarray): 2D array containing dataset
+        lambda_ (float): Regularization parameter
+        initial_w (type): initialized weights
+        max_iters (int): maximum number of iterations of the algorithm
+        gamma (float): step size of the gradient descent
 
     Returns:
-        type: description
+        ndarray: final weights
+        float: final loss
 
     Raises:
         Exception: description
-
     """
 
     N, D = tx.shape

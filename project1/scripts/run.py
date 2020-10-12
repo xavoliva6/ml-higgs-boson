@@ -1,26 +1,26 @@
 import datetime
 import numpy as np
-np.random.seed(0)
 import os.path
-from collections import defaultdict
 
-# TODO remove functions that are not used here
-from utils import calculate_mse_loss, calculate_acc, cross_validation, build_k_indices
+from utils import calculate_mse_loss, calculate_acc, cross_validation, build_k_indices, sigmoid
 from proj1_helpers import predict_labels, create_csv_submission
 from data_loader import get_data
-from implementations import *
-from global_variables import *
+from config import IMPLEMENTATIONS, SUBMISSION_PATH
 
-if __name__ == "__main__": # COMMENT CODE BELOW TODO
+np.random.seed(0)
+
+if __name__ == "__main__":  # COMMENT CODE BELOW TODO
     K = 5
 
-    groups_tr_X, groups_tr_Y, indc_list_tr, groups_te_X, groups_te_Y, indc_list_te, ids_te = get_data(use_preexisting=True,
-        save_preprocessed=True, z_outlier=False, feature_expansion=False, correlation_analysis=False)
+    groups_tr_X, groups_tr_Y, indc_list_tr, groups_te_X, groups_te_Y, indc_list_te, ids_te = get_data(
+        use_preexisting=True, save_preprocessed=True, z_outlier=False, feature_expansion=False,
+        correlation_analysis=False)
 
-    Y_te = np.zeros((568238))
-    for group_indx, (X_tr, Y_tr, X_te, Y_te_indx) in enumerate(zip(groups_tr_X, groups_tr_Y, groups_te_X, indc_list_te)):
-        print("="*240)
-        print("GROUP {}".format(group_indx+1))
+    Y_te = np.zeros(shape=(568238,))
+    for group_indx, (X_tr, Y_tr, X_te, Y_te_indx) in enumerate(
+            zip(groups_tr_X, groups_tr_Y, groups_te_X, indc_list_te)):
+        print("=" * 240)
+        print(f"GROUP {group_indx + 1}")
 
         N, D = X_tr.shape
 
@@ -81,7 +81,6 @@ if __name__ == "__main__": # COMMENT CODE BELOW TODO
                       "lambda_": best["lambda_"]}
 
         W_best, _ = f_best(**args_train)
-
 
         Y_te[Y_te_indx] = predict_labels(W_best, X_te)
 
