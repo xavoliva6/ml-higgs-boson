@@ -1,5 +1,5 @@
-from implementations import least_squares_GD, least_squares_SGD, least_squares,\
-    ridge_regression, logistic_regression, reg_logistic_regression
+from implementations import least_squares_GD, least_squares_SGD, least_squares, ridge_regression, logistic_regression, \
+    reg_logistic_regression, support_vector_machine_GD
 
 DATA_PATH = "../data"
 
@@ -52,8 +52,8 @@ IMPLEMENTATIONS = {
     },
     "Ridge Regression": {
         "function": ridge_regression,
-        "max_iters": 100,
-        "gamma": 0.01,
+        "max_iters": None,
+        "gamma": None,
         "lambda_": 0.1
     },
     "Logistic Regression": {
@@ -66,6 +66,12 @@ IMPLEMENTATIONS = {
         "function": reg_logistic_regression,
         "max_iters": 100,
         "gamma": 0.1,
+        "lambda_": 0.1
+    },
+    "Support Vector Machine": {
+        "function": support_vector_machine_GD,
+        "max_iters": 500,
+        "gamma": 0.05,
         "lambda_": 0.1
     }
 }

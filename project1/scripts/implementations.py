@@ -1,6 +1,6 @@
 import numpy as np
 
-from utils import calculate_mse_loss, sigmoid, calculate_logistic_loss
+from utils import calculate_mse_loss, sigmoid, calculate_logistic_loss, calculate_hinge_loss
 
 
 def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
@@ -10,7 +10,7 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
     Args:
         y (ndarray): 1D array containing labels
         tx (ndarray): 2D array containing dataset
-        initial_w (type): initialized weights
+        initial_w (ndarray): initialized weights
         max_iters (int): maximum number of iterations of the algorithm
         gamma (float): Step size of the gradient descent
 
@@ -47,7 +47,7 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma, **kwargs):
     Args:
         y (ndarray): 1D array containing labels
         tx (ndarray): 2D array containing dataset
-        initial_w (type): initialized weights
+        initial_w (ndarray): initialized weights
         max_iters (int): maximum number of iterations of the algorithm
         gamma (float): step size of the gradient descent
 
@@ -143,7 +143,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, **kwargs):
     Args:
         y (ndarray): 1D array containing labels
         tx (ndarray): 2D array containing dataset
-        initial_w (type): initialized weights
+        initial_w (ndarray): initialized weights
         max_iters (int): maximum number of iterations of the algorithm
         gamma (float): step size of the gradient descent
 
@@ -178,7 +178,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
         y (ndarray): 1D array containing labels
         tx (ndarray): 2D array containing dataset
         lambda_ (float): Regularization parameter
-        initial_w (type): initialized weights
+        initial_w (ndarray): initialized weights
         max_iters (int): maximum number of iterations of the algorithm
         gamma (float): step size of the gradient descent
 
@@ -202,5 +202,49 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
 
     # calculate final loss
     loss = calculate_logistic_loss(y, tx, w) + lambda_ * w.T @ w
+
+    return w, loss
+
+
+# Additional algorithms #
+
+def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_):
+    """
+    Support vector machine algorithm using gradient descent.
+
+    Args:
+        y (ndarray): 1D array containing labels
+        tx (ndarray): 2D array containing dataset
+        lambda_ (float): Regularization parameter
+        initial_w (ndarray): initialized weights
+        max_iters (int): maximum number of iterations of the algorithm
+        gamma (float): step size of the gradient descent
+
+    Returns:
+        ndarray: final weights
+        float: final loss
+
+    Raises:
+        Exception: description
+    """
+    N, D = tx.shape
+    w = initial_w
+
+    for n_iter in range(max_iters):
+
+        grad = np.zeros(shape=w.shape)
+        # https://www.robots.ox.ac.uk/~az/lectures/ml/lect2.pdf
+        s_vec = y * (tx @ w)
+        # compute gradient
+        grad += -y[s_vec < 1] @ tx[s_vec < 1]
+
+        grad = 1 / N * (grad + lambda_ * w)
+
+        # update w by gradient descent update
+        w -= gamma * grad
+        print(calculate_hinge_loss(y, tx, w) + lambda_ / 2 * np.sum(w ** 2))
+
+    # calculate final loss
+    loss = calculate_hinge_loss(y, tx, w) + lambda_ / 2 * np.sum(w ** 2)
 
     return w, loss

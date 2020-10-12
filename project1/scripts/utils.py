@@ -1,9 +1,11 @@
 import numpy as np
 
+
 def calculate_acc(y, y_pred):
+    N = y_pred.shape[0]
     y_pred[y_pred < 0] = -1
     y_pred[y_pred >= 0] = 1
-    return ((y*y_pred)>0).sum()/y.shape[0]
+    return 1 / N * ((y * y_pred) > 0).sum()
 
 def calculate_mse(e):
     """Calculate the mse for error vector e."""
@@ -36,6 +38,14 @@ def calculate_logistic_loss(y, tx, w):
     loss = -1 / N * (y.T @ np.log(pred + epsilon) + (1 - y).T @ np.log(1 - pred + epsilon))
 
     return loss
+
+
+def calculate_hinge_loss(y, tx, w):
+    """calculate the hinge loss."""
+    # https://medium.com/@saishruthi.tn/support-vector-machine-using-numpy-846f83f4183d
+    c_x = np.ones(shape=tx.shape[0]) - y * (tx @ w)
+    c_x = np.clip(c_x, a_min=0, a_max=np.inf)
+    return c_x.mean()
 
 
 def cross_validation(y, x, k_indices, k_iteration):
