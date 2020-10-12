@@ -259,7 +259,7 @@ def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_, **kwa
             raise ValueError('Support Vector Machine diverged!!!')
 
     # calculate final loss
-    loss = calculate_hinge_loss(y, tx, w) + lambda_ / 2 * np.sum(w ** 2)
+    loss = calculate_hinge_loss(y, tx, w) + lambda_ * w.T @ w
 
     return w, loss
 
