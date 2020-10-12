@@ -1,5 +1,5 @@
 from implementations import least_squares_GD, least_squares_SGD, least_squares, ridge_regression, logistic_regression, \
-    reg_logistic_regression, support_vector_machine_GD
+    reg_logistic_regression, support_vector_machine_GD, least_squares_BGD
 
 DATA_PATH = "../data"
 
@@ -73,5 +73,11 @@ IMPLEMENTATIONS = {
         "max_iters": 500,
         "gamma": 0.05,
         "lambda_": 0.1
-    }
+    },
+    "Least Squares Mini-Batch GD": {
+        "function": least_squares_BGD,
+        "max_iters": 1000,
+        "gamma": 0.005,
+        "lambda_": None
+    },
 }

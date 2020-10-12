@@ -5,7 +5,7 @@ from utils import calculate_mse_loss, sigmoid, calculate_logistic_loss, calculat
 
 def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
     """
-    Linear regression using gradient descent.
+    Least squares regression using gradient descent.
 
     Args:
         y (ndarray): 1D array containing labels
@@ -179,7 +179,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, **kwargs):
     return w, loss
 
 
-def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
+def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, **kwargs):
     """
     Regularized logistic regression using gradient descent.
 
@@ -220,9 +220,9 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma):
 
 # Additional algorithms #
 
-def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_):
+def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_, **kwargs):
     """
-    Support vector machine algorithm using gradient descent.
+    Support vector regression using gradient descent.
 
     Args:
         y (ndarray): 1D array containing labels
@@ -262,3 +262,49 @@ def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_):
     loss = calculate_hinge_loss(y, tx, w) + lambda_ / 2 * np.sum(w ** 2)
 
     return w, loss
+
+
+def least_squares_BGD(y, tx, initial_w, max_iters, gamma, batch_size=64, **kwargs):
+    """
+    Least Squares regression using mini-batch gradient descent.
+
+    Args:
+        y (ndarray): 1D array containing labels
+        tx (ndarray): 2D array containing dataset
+        initial_w (ndarray): initialized weights
+        max_iters (int): maximum number of iterations of the algorithm
+        gamma (float): step size of the gradient descent
+        batch_size (int): size of the batch
+
+    Returns:
+        ndarray: final weights
+        float: final loss
+
+    Raises:
+        ValueError: If the weights get too big
+    """
+
+    N, D = tx.shape
+    w = initial_w
+
+    for n_iter in range(max_iters):
+        # create random batch of batch_size
+        perm = np.random.permutation(N)[:batch_size]
+        tx_b = tx[perm]
+        y_b = y[perm]
+
+        # compute gradient
+        e = y_b - tx_b @ w
+        grad = - 1 / batch_size * tx_b.T @ e
+        # update w by gradient descent update
+        w -= gamma * grad
+
+        if np.max(w) > 1e4:
+            raise ValueError('Least Squares mini-batch GD diverged!!!')
+
+    # calculate loss
+    y_pred = tx @ w
+    loss = calculate_mse_loss(y, y_pred)
+
+    return w, loss
+
