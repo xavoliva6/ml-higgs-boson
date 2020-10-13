@@ -1,6 +1,7 @@
 import numpy as np
 
 from utils import calculate_mse_loss, sigmoid, calculate_logistic_loss, calculate_hinge_loss
+import config
 
 
 def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
@@ -264,7 +265,7 @@ def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_, **kwa
     return w, loss
 
 
-def least_squares_BGD(y, tx, initial_w, max_iters, gamma, batch_size=64, **kwargs):
+def least_squares_BGD(y, tx, initial_w, max_iters, gamma, batch_size=1024, **kwargs):
     """
     Least Squares regression using mini-batch gradient descent with diminishing step size.
 
@@ -286,8 +287,10 @@ def least_squares_BGD(y, tx, initial_w, max_iters, gamma, batch_size=64, **kwarg
 
     N, D = tx.shape
     w = initial_w
+    n_iter = 1
+    norm_gradient = np.inf
 
-    for n_iter in range(1, max_iters + 1):
+    while n_iter <= max_iters and norm_gradient > config.GRAD_STOP_CONDITION:
         # create random batch of batch_size
         perm = np.random.permutation(N)[:batch_size]
         tx_b = tx[perm]
@@ -301,6 +304,9 @@ def least_squares_BGD(y, tx, initial_w, max_iters, gamma, batch_size=64, **kwarg
 
         if np.max(w) > 1e4:
             raise ValueError('Least Squares mini-batch GD diverged!!!')
+
+        norm_gradient = np.linalg.norm(grad)
+        n_iter += 1
 
     # calculate loss
     y_pred = tx @ w

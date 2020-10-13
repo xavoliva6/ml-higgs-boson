@@ -34,13 +34,13 @@ GROUP_COL_FILTERED_TUPLE = (
 IMPLEMENTATIONS = {
     "Least Squares Gradient Descent": {
         "function": least_squares_GD,
-        "max_iters": 1000,
+        "max_iters": 10000,
         "gamma": 0.005,
         "lambda_": None
     },
     "Least Squares Stochastic GD": {
         "function": least_squares_SGD,
-        "max_iters": 1000,
+        "max_iters": 10000,
         "gamma": 0.005,
         "lambda_": None
     },
@@ -58,26 +58,28 @@ IMPLEMENTATIONS = {
     },
     "Logistic Regression": {
         "function": logistic_regression,
-        "max_iters": 1000,
+        "max_iters": 10000,
         "gamma": 0.01,
         "lambda_": None
     },
     "Regularized Logistic Regression": {
         "function": reg_logistic_regression,
-        "max_iters": 100,
+        "max_iters": 10000,
         "gamma": 0.01,
         "lambda_": 0.1
     },
     "Support Vector Machine": {
         "function": support_vector_machine_GD,
-        "max_iters": 1000,
+        "max_iters": 10000,
         "gamma": 0.05,
         "lambda_": 0.1
     },
     "Least Squares Mini-Batch GD": {
         "function": least_squares_BGD,
-        "max_iters": 1000,
-        "gamma": 0.5,
+        "max_iters": 10000,
+        "gamma": 1,
         "lambda_": None
     },
 }
+
+GRAD_STOP_CONDITION = 1e-15
