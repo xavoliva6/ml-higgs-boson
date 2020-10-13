@@ -2,7 +2,7 @@ import datetime
 import numpy as np
 import os.path
 
-from utils import calculate_mse_loss, calculate_acc, cross_validation, build_k_indices, sigmoid
+from utils import calculate_mse_loss, calculate_acc, cross_validation, build_k_indices, sigmoid, create_labels
 from proj1_helpers import predict_labels, create_csv_submission
 from data_loader import get_data
 from config import IMPLEMENTATIONS, SUBMISSION_PATH
@@ -10,7 +10,7 @@ from config import IMPLEMENTATIONS, SUBMISSION_PATH
 np.random.seed(0)
 
 if __name__ == "__main__":  # COMMENT CODE BELOW TODO
-    K = 5
+    K = 8
 
     groups_tr_X, groups_tr_Y, indc_list_tr, groups_te_X, groups_te_Y, indc_list_te, ids_te = get_data(
         use_preexisting=True, save_preprocessed=True, z_outlier=False, feature_expansion=False,
@@ -54,9 +54,14 @@ if __name__ == "__main__":  # COMMENT CODE BELOW TODO
                 W, loss_tr = f["function"](**args_train)
 
                 if "Logistic" in f_name:
-                    prediction_val = sigmoid(X_val @ W)
+                    prediction_val_log_regression = sigmoid(X_val @ W)
+                    # convert from interval [0, 1] to [-1, 1]
+                    prediction_val_regression = (prediction_val_log_regression * 2) - 1
+
                 else:
-                    prediction_val = X_val @ W
+                    prediction_val_regression = X_val @ W
+
+                prediction_val = create_labels(prediction_val_regression)
 
                 loss_val = calculate_mse_loss(Y_val, prediction_val)
                 loss_array_val[k_iteration, j] = loss_val

@@ -7,6 +7,7 @@ def calculate_acc(y, y_pred):
     y_pred[y_pred >= 0] = 1
     return 1 / N * ((y * y_pred) > 0).sum()
 
+
 def calculate_mse(e):
     """Calculate the mse for error vector e."""
     return 1 / 2 * np.mean(e ** 2)
@@ -21,6 +22,15 @@ def calculate_mse_loss(y, y_pred):
     """Calculate the loss."""
     e = y - y_pred
     return calculate_mse(e)
+
+
+def create_labels(y_regression):
+    """Generates class labels given regression labels"""
+    y_class = np.zeros_like(y_regression)
+    y_class[np.where(y_regression <= 0)] = -1
+    y_class[np.where(y_regression > 0)] = 1
+
+    return y_class
 
 
 def sigmoid(x):
@@ -51,6 +61,7 @@ def calculate_hinge_loss(y, tx, w):
 def cross_validation(y, x, k_indices, k_iteration):
     """Compute cross validation for specific iteration."""
     k = k_indices.shape[0]
+
     val_index = k_indices[k_iteration]
     train_index = k_indices[np.arange(k) != k_iteration]
     train_index = train_index.reshape(-1)

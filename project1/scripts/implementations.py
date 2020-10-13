@@ -266,7 +266,7 @@ def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_, **kwa
 
 def least_squares_BGD(y, tx, initial_w, max_iters, gamma, batch_size=64, **kwargs):
     """
-    Least Squares regression using mini-batch gradient descent.
+    Least Squares regression using mini-batch gradient descent with diminishing step size.
 
     Args:
         y (ndarray): 1D array containing labels
@@ -287,7 +287,7 @@ def least_squares_BGD(y, tx, initial_w, max_iters, gamma, batch_size=64, **kwarg
     N, D = tx.shape
     w = initial_w
 
-    for n_iter in range(max_iters):
+    for n_iter in range(1, max_iters + 1):
         # create random batch of batch_size
         perm = np.random.permutation(N)[:batch_size]
         tx_b = tx[perm]
@@ -297,7 +297,7 @@ def least_squares_BGD(y, tx, initial_w, max_iters, gamma, batch_size=64, **kwarg
         e = y_b - tx_b @ w
         grad = - 1 / batch_size * tx_b.T @ e
         # update w by gradient descent update
-        w -= gamma * grad
+        w -= gamma / n_iter * grad
 
         if np.max(w) > 1e4:
             raise ValueError('Least Squares mini-batch GD diverged!!!')
@@ -307,4 +307,3 @@ def least_squares_BGD(y, tx, initial_w, max_iters, gamma, batch_size=64, **kwarg
     loss = calculate_mse_loss(y, y_pred)
 
     return w, loss
-
