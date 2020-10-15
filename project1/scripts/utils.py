@@ -34,18 +34,21 @@ def create_labels(y_regression):
 
 
 def sigmoid(x):
-    """apply sigmoid function on t."""
-    return 1.0 / (1 + np.exp(-x))
+    """Numerically stable sigmoid function."""
+    return np.piecewise(x, [x > 0], [
+        lambda i: 1 / (1 + np.exp(-i)),
+        lambda i: np.exp(i) / (1 + np.exp(i))
+    ])
 
 
 def calculate_logistic_loss(y, tx, w):
     """compute the cost by negative log likelihood."""
     N = len(y)
-    epsilon = 1e-5
+    EPSILON = 1e-10
     pred = sigmoid(tx @ w)
     # https://ml-cheatsheet.readthedocs.io/en/latest/logistic_regression.html
     # https://stackoverflow.com/questions/38125319/python-divide-by-zero-encountered-in-log-logistic-regression
-    loss = -1 / N * (y.T @ np.log(pred + epsilon) + (1 - y).T @ np.log(1 - pred + epsilon))
+    loss = -1 / N * (y.T @ np.log(pred + EPSILON) + (1 - y).T @ np.log(1 - pred + EPSILON))
 
     return loss
 
