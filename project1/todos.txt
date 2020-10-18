@@ -1,0 +1,15 @@
+TODOS:
+
+1. Class Imbalance (SMOTE is suuuper slow, ... maybe use PCA instead?)
+2. When using Polynomial Feature Augmentation, LS-SGD and LS procude huge errors...
+  - in some occurences, it even influence ridge regression and makes it waaay worse
+3. Add Accuracy next to validation loss [DONE]
+4. Someone Needs to go over what i did, so i didnt do any error
+5. Some confilct with groups + k-fold (e.g. "best method" info is a bit weird now): not sure if there is really any problem
+6. test out preprocessing method and see if they work & have a positive influence
+7. test out different params (i.e. max param, regression paramete, ...)
+8. Maybe use acc instead of loss to select model???
+9. Do batch sgd
+10. finish doctstring for files and function and add comments
+11. add download [download]
+12. use multiprocessing package to prallelize distance matrix

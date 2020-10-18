@@ -30,7 +30,8 @@ def download_url(url, save_path, chunk_size=128):
 
 
 def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
-             feature_expansion=False, correlation_analysis=False, apply_SMOTE=False):
+             feature_expansion=False, correlation_analysis=False,
+             apply_SMOTE=False, M=4):
     """
     Data supplying function.
 
@@ -109,8 +110,8 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
 
             # perform feature expansion
             if feature_expansion:
-                groups_tr_X[indx] = augment_features_polynomial(groups_tr_X[indx], M=4)
-                groups_te_X[indx] = augment_features_polynomial(groups_te_X[indx], M=4)
+                groups_tr_X[indx] = augment_features_polynomial(groups_tr_X[indx], M=M)
+                groups_te_X[indx] = augment_features_polynomial(groups_te_X[indx], M=M)
 
             # standardize features
             groups_tr_X[indx] = standardize(groups_tr_X[indx])

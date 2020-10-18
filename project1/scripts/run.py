@@ -13,15 +13,14 @@ if __name__ == "__main__":  # COMMENT CODE BELOW TODO
     K = 8
 
     groups_tr_X, groups_tr_Y, indc_list_tr, groups_te_X, groups_te_Y, indc_list_te, ids_te = get_data(
-        use_preexisting=True, save_preprocessed=True, z_outlier=False, feature_expansion=False,
-        correlation_analysis=False)
+        use_preexisting=False, save_preprocessed=True, z_outlier=False, feature_expansion=True,
+        correlation_analysis=False, apply_SMOTE=False, M=4)
 
     Y_te = np.zeros(shape=(568238,))
     for group_indx, (X_tr, Y_tr, X_te, Y_te_indx) in enumerate(
             zip(groups_tr_X, groups_tr_Y, groups_te_X, indc_list_te)):
         print("=" * 240)
         print(f"GROUP {group_indx + 1}")
-
         N, D = X_tr.shape
 
         # Cross-validation
