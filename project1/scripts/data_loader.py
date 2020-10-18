@@ -4,8 +4,8 @@ import zipfile
 import requests
 
 from proj1_helpers import load_csv_data
-from preprocessing import standardize, add_bias, augment_features_polynomial, SMOTE, split_groups,\
-    z_score_outlier_detection, corr_filter
+from preprocessing import standardize, add_bias, augment_features_polynomial, split_groups,\
+    z_score_outlier_detection, corr_filter, class_imbalance_equalizer
 import config
 
 
@@ -31,7 +31,7 @@ def download_url(url, save_path, chunk_size=128):
 
 def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
              feature_expansion=False, correlation_analysis=False,
-             apply_SMOTE=False, M=4):
+             class_equalizer=False, M=4):
     """
     Data supplying function.
 
@@ -54,8 +54,8 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
         correlation_analysis (bool): enabling this parameters will allow the
                                         function to perform correlation analysis
                                         and remove highly correlated features
-        apply_SMOTE (bool): enabling this parameters will allow the function to
-                            perform SMOTE (Synthetic Minority Oversampling Technique)
+        class_equalizer (bool): enabling this parameters will allow the function to
+                            perform class balancing
 
     Returns:
         list: groups of training samples
@@ -100,13 +100,15 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
             if z_outlier:
                 groups_tr_X[indx] = z_score_outlier_detection(groups_tr_X[indx], thresh=config.Z_VALUE)
                 groups_te_X[indx] = z_score_outlier_detection(groups_te_X[indx], thresh=config.Z_VALUE)
+
             # perform correlation analysis
             if correlation_analysis:
                 groups_tr_X[indx], columns_to_keep = corr_filter(groups_tr_X[indx], threshold=0.95)
                 groups_te_X[indx] = groups_te_X[indx][:, columns_to_keep]
-            # perform SMOTE
-            if apply_SMOTE:
-                groups_tr_X[indx], groups_tr_Y[indx] = SMOTE(groups_tr_X[indx], groups_tr_Y[indx])
+
+            # perform class equalization
+            if class_equalizer:
+                groups_tr_X[indx], groups_tr_Y[indx] = class_imbalance_equalizer(groups_tr_X[indx], groups_tr_Y[indx])
 
             # perform feature expansion
             if feature_expansion:

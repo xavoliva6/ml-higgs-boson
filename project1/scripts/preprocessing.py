@@ -1,22 +1,20 @@
 import numpy as np
 import config
 
-
-def SMOTE(X, Y, k=4):  # TODO takes like 2 hours for 15% of the data... IDEA: Use PCA to find closest neighbours?
+def class_imbalance_equalizer(X, Y):
     """
-    Synthetic Minority Oversampling Technique.
+    Function balancing unbalanced classes in a dataset.
 
     Determines underrepresented class (we assume that there are only 2 classes)
-    and creates synthetic samples in order to equalize the imbalance.
+    and creates synthetic samples by simplying copying preexisting samples.
 
     Args:
         X (ndarray): sample matrix [NxD]
         Y (ndarray): labels/classes [N]
-        k (int):
 
     Returns:
         ndarray: equalized sample matrix [(N+T)xD]
-        ndarray: description [N+T]protonmail.com
+        ndarray: description [N+T]
     """
     N, D = X.shape
 
@@ -39,36 +37,15 @@ def SMOTE(X, Y, k=4):  # TODO takes like 2 hours for 15% of the data... IDEA: Us
     X_new[:N] = X
     Y_new[:N] = Y
 
-    # create distance matrix
-    dist = np.zeros((under_represented_matrix.shape[0], under_represented_matrix.shape[0]))
+    # get random samples from the under_represented_matrix into new X
+    new_indx = np.random.randint(low=under_represented_matrix.shape[0], size=added_samples)
+    X_new[N:] = under_represented_matrix[new_indx]
 
-    print("Calculating Distance Matrix")
-    # calculate distance matrix
-    for indx1 in range(under_represented_matrix.shape[0]):
-        for indx2 in range(indx1):
-            print(indx1, under_represented_matrix.shape)
-            distance = np.linalg.norm(under_represented_matrix[indx1] - under_represented_matrix[indx1])
-            dist[indx1, indx2] = distance
-            dist[indx2, indx1] = distance
-    print("Finished")
-
-    # get K closest neighbours for each sample
-    closest_neighbors = np.zeros((under_represented_matrix.shape[0], k))
-    for indx in range(under_represented_matrix.shape[0]):
-        closest_neighbors[indx] = np.argsort(dist[indx], 0)[:k]
-
-    # now generate new samples
-    for indx in range(added_samples):
-        random_indx = np.random.randint(under_represented_matrix.shape[0])
-        linear_combination_weights = np.random.dirichlet(np.ones(k), size=1)[0]
-        X_new[N + indx] = np.sum([v * w for v, w in
-                                  zip(under_represented_matrix[closest_neighbors[random_indx].astype(int)],
-                                      linear_combination_weights)], axis=0)
-    # set labels in Y
+    # set labels in Y accordingly
     Y_new[N:] = under_represented
 
     return X_new, Y_new
-
+    
 
 def remove_redundant(X):
     """

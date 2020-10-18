@@ -14,7 +14,7 @@ if __name__ == "__main__":  # COMMENT CODE BELOW TODO
 
     groups_tr_X, groups_tr_Y, indc_list_tr, groups_te_X, groups_te_Y, indc_list_te, ids_te = get_data(
         use_preexisting=False, save_preprocessed=True, z_outlier=False, feature_expansion=True,
-        correlation_analysis=False, apply_SMOTE=False, M=4)
+        correlation_analysis=False, class_equalizer=False, M=4)
 
     Y_te = np.zeros(shape=(568238,))
     for group_indx, (X_tr, Y_tr, X_te, Y_te_indx) in enumerate(
@@ -22,6 +22,10 @@ if __name__ == "__main__":  # COMMENT CODE BELOW TODO
         print("=" * 240)
         print(f"GROUP {group_indx + 1}")
         N, D = X_tr.shape
+        print(N,D)
+        print(np.sum(Y_tr == 1))
+
+        print(np.sum(Y_tr == -1))
 
         # Cross-validation
         k_indices = build_k_indices(Y_tr, K)
