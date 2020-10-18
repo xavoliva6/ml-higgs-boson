@@ -58,7 +58,7 @@ def calculate_hinge_loss(y, tx, w):
     # https://medium.com/@saishruthi.tn/support-vector-machine-using-numpy-846f83f4183d
     c_x = np.ones(shape=tx.shape[0]) - y * (tx @ w)
     c_x = np.clip(c_x, a_min=0, a_max=np.inf)
-    return c_x.mean()protonmail.com
+    return c_x.mean()
 
 
 def cross_validation(y, x, k_indices, k_iteration):
