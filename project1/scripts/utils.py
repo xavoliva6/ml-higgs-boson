@@ -41,6 +41,20 @@ def sigmoid(x):
     ])
 
 
+def convert_class_labels_logistic(y: np.ndarray):
+    """convert from interval [-1, 1] to [0, 1]"""
+    if set(y) == {-1, 1}:
+        y = ((y + 1) / 2).astype(int)
+    return y
+
+
+def reconvert_class_labels_logistic(y: np.ndarray):
+    """convert from interval [0, 1] to [-1, 1]"""
+    if set(y) == {0, 1}:
+        y = ((y * 2) - 1).astype(int)
+    return y
+
+
 def calculate_logistic_loss(y, tx, w):
     """compute the cost by negative log likelihood."""
     N = len(y)
@@ -61,8 +75,8 @@ def calculate_hinge_loss(y, tx, w):
     return c_x.mean()
 
 
-def cross_validation(y, x, k_indices, k_iteration):
-    """Compute cross validation for specific iteration."""
+def cross_validation_iter(y, x, k_indices, k_iteration):
+    """Compute cross validation for a single iteration."""
     k = k_indices.shape[0]
 
     val_index = k_indices[k_iteration]

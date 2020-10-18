@@ -1,3 +1,4 @@
+import numpy as np
 from implementations import least_squares_GD, least_squares_SGD, least_squares, ridge_regression, logistic_regression, \
     reg_logistic_regression, support_vector_machine_GD, least_squares_BGD
 
@@ -34,51 +35,51 @@ GROUP_COL_FILTERED_TUPLE = (
 IMPLEMENTATIONS = {
     "Least Squares Gradient Descent": {
         "function": least_squares_GD,
-        "max_iters": 10000,
-        "gamma": 0.005,
-        "lambda_": None
+        "max_iters_list": [100],
+        "gammas": list(np.linspace(0.1, 0.5, num=5)),
+        "lambdas": [None],
     },
     "Least Squares Stochastic GD": {
         "function": least_squares_SGD,
-        "max_iters": 10000,
-        "gamma": 0.005,
-        "lambda_": None
+        "max_iters_list": [100],
+        "gammas": [0.01],
+        "lambdas": [None],
     },
     "Least Squares using Pseudo-Inverse": {
         "function": least_squares,
-        "max_iters": None,
-        "gamma": None,
-        "lambda_": None
+        "max_iters_list": [None],
+        "gammas": [None],
+        "lambdas": [None],
     },
     "Ridge Regression": {
         "function": ridge_regression,
-        "max_iters": None,
-        "gamma": None,
-        "lambda_": 0.1
+        "max_iters_list": [None],
+        "gammas": [None],
+        "lambdas": [0.1]
     },
     "Logistic Regression": {
         "function": logistic_regression,
-        "max_iters": 10000,
-        "gamma": 0.01,
-        "lambda_": None
+        "max_iters_list": [100],
+        "gammas": [0.01],
+        "lambdas": [None]
     },
     "Regularized Logistic Regression": {
         "function": reg_logistic_regression,
-        "max_iters": 10000,
-        "gamma": 0.01,
-        "lambda_": 0.1
+        "max_iters_list": [100],
+        "gammas": [0.01],
+        "lambdas": [0.1]
     },
     "Support Vector Machine": {
         "function": support_vector_machine_GD,
-        "max_iters": 10000,
-        "gamma": 0.05,
-        "lambda_": 0.1
+        "max_iters_list": [100],
+        "gammas": [0.05],
+        "lambdas": [0.1]
     },
     "Least Squares Mini-Batch GD": {
         "function": least_squares_BGD,
-        "max_iters": 10000,
-        "gamma": 1,
-        "lambda_": None
+        "max_iters_list": [100],
+        "gammas": [1],
+        "lambdas": [None]
     },
 }
 

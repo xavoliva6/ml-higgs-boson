@@ -1,7 +1,7 @@
 import config
 import numpy as np
-from utils import calculate_mse_loss, sigmoid, calculate_logistic_loss, calculate_hinge_loss
-
+from utils import calculate_mse_loss, sigmoid, calculate_logistic_loss, calculate_hinge_loss, \
+    convert_class_labels_logistic
 
 
 def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
@@ -163,7 +163,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, **kwargs):
     """
 
     N, D = tx.shape
-
+    y = convert_class_labels_logistic(y)
     w = initial_w
     for n_iter in range(max_iters):
         e = y - sigmoid(tx @ w)
@@ -201,6 +201,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, **kwarg
     """
 
     N, D = tx.shape
+    y = convert_class_labels_logistic(y)
 
     w = initial_w
     for n_iter in range(max_iters):
