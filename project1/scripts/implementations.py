@@ -1,7 +1,7 @@
-import numpy as np
-
-from utils import calculate_mse_loss, sigmoid, calculate_logistic_loss, calculate_hinge_loss
 import config
+import numpy as np
+from utils import calculate_mse_loss, sigmoid, calculate_logistic_loss, calculate_hinge_loss
+
 
 
 def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):

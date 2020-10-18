@@ -16,7 +16,7 @@ def SMOTE(X, Y, k=4):  # TODO takes like 2 hours for 15% of the data... IDEA: Us
 
     Returns:
         ndarray: equalized sample matrix [(N+T)xD]
-        ndarray: description [N+T]
+        ndarray: description [N+T]protonmail.com
     """
     N, D = X.shape
 
