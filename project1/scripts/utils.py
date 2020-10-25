@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def calculate_acc(y, y_pred):
     N = y_pred.shape[0]
     y_pred[y_pred < 0] = -1
@@ -102,14 +103,14 @@ def build_k_indices(y, k):
 
 def transform_log_dict_to_param_dict(log_dict):
     param_dict = {}
-    for group_indx in range(1,7):
+    for group_indx in range(1, 7):
         best_acc_indx = np.argmax([t[0] for t in log_dict[str(group_indx)]])
         best_acc_dict = log_dict[str(group_indx)][best_acc_indx][1]
-        param_dict[str(group_indx)] = {"M":best_acc_dict["M"],
-            "corr_anal":best_acc_dict["CA"],
-            "class_eq":best_acc_dict["CE"],
-            "z_outlier":best_acc_dict["Z"],
-            "function_name":best_acc_dict["function"],
-            "params":best_acc_dict["params"]
-        }
+        param_dict[str(group_indx)] = {"M": best_acc_dict["M"],
+                                       "corr_anal": best_acc_dict["CA"],
+                                       "class_eq": best_acc_dict["CE"],
+                                       "z_outlier": best_acc_dict["Z"],
+                                       "function_name": best_acc_dict["function"],
+                                       "params": best_acc_dict["params"]
+                                       }
     return param_dict

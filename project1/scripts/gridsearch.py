@@ -14,7 +14,7 @@ np.random.seed(0)
 
 def cross_validation(k, X, y, params, regression):
     """
-    Peforming regression using K-Cross Validation.
+    Performing regression using K-Cross Validation.
 
     This function is used to generate a model, given data, a regression function
     and a set of parameters.
@@ -88,7 +88,7 @@ if __name__ == "__main__":
     # define the name of the log file
     log_file_name = "log_gridsearch_" + START_TIME + ".json"
     # log data is a dictionary, with groups as indexes
-    log_dict = {group_indx:[] for group_indx in range(1,7)}
+    log_dict = {group_indx: [] for group_indx in range(1, 7)}
 
     for m in M:
         for z_outlier_bool in z_outlier:
@@ -106,9 +106,8 @@ if __name__ == "__main__":
                     # for each group...
                     for group_indx, (X_tr, Y_tr, X_te, Y_te_indx) in enumerate(
                             zip(groups_tr_X, groups_tr_Y, groups_te_X, indc_list_te), start=1):
-                        #print("=" * 240)
-                        print(kkk*2 + f"Group: {group_indx}")
-
+                        # print("=" * 240)
+                        print(kkk * 2 + f"Group: {group_indx}")
 
                         # get the shape of the sample array
                         N, D = X_tr.shape
@@ -161,11 +160,11 @@ if __name__ == "__main__":
                         # appended to the list of the corresponding group
                         with open(LOG_PATH + "/" + log_file_name, "w") as f:
                             log_dict[group_indx].append((acc_best_total,
-                                {"function":f_best_name,
-                                "params":best_params,
-                                "M":m,
-                                "Z":z_outlier_bool,
-                                "CA":correlation_analysis_bool,
-                                "CE":class_equalizer_bool
-                                }))
+                                                         {"function": f_best_name,
+                                                          "params": best_params,
+                                                          "M": m,
+                                                          "Z": z_outlier_bool,
+                                                          "CA": correlation_analysis_bool,
+                                                          "CE": class_equalizer_bool
+                                                          }))
                             json.dump(log_dict, f, indent=4)

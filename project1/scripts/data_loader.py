@@ -5,7 +5,7 @@ import numpy as np
 from pathlib import Path
 
 from proj1_helpers import load_csv_data
-from preprocessing import standardize, add_bias, augment_features_polynomial, split_groups,\
+from preprocessing import standardize, add_bias, augment_features_polynomial, split_groups, \
     z_score_outlier_detection, corr_filter, class_imbalance_equalizer
 import config
 
@@ -31,17 +31,17 @@ def download_url(url, save_path, chunk_size=128):
 
 
 def make_to_list(value):
-    if isinstance(value, int) or isinstance(value, bool) :
+    if isinstance(value, int) or isinstance(value, bool):
         value = [value] * 6
     elif isinstance(value, list):
         if len(value) != 6:
             raise TypeError
     return value
 
+
 def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
              feature_expansion=False, correlation_analysis=False,
              class_equalizer=False, M=4):
-
     """
     Data supplying function.
 
@@ -112,7 +112,6 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
         class_equalizer = make_to_list(class_equalizer)
         correlation_analysis = make_to_list(correlation_analysis)
         M = make_to_list(M)
-
 
         for indx in range(nr_groups_tr):
             # perform z outlier detection

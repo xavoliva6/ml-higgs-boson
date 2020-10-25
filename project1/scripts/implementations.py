@@ -106,10 +106,12 @@ def least_squares(y, tx, **kwargs):
 
     N, D = tx.shape
     # compute w using explicit solution
-    try:
-        w = np.linalg.solve(tx.T @ tx, tx.T @ y)
-    except:
-        w = np.linalg.lstsq(tx.T @ tx, tx.T @ y)
+    # w = np.linalg.solve(tx.T @ tx, tx.T @ y)
+    # We used linalg.lstsq instead of linalg.solve, because it is preferred when dealing with poorly conditioned
+    # matrices, see the following link:
+    # https://stackoverflow.com/questions/41648246/efficient-computation-of-the-least-squares-algorithm-in-numpy
+    # When adding rows to equalize class imbalance, tx.T @ tx does not have a full column rank.
+    w = np.linalg.lstsq(tx, y)
     # calculate loss
     y_pred = tx @ w
     loss = calculate_mse_loss(y, y_pred)
