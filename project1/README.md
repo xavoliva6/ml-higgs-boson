@@ -1,10 +1,28 @@
 # Class Project 1
 
-Explain how we did small technical details and how users can re-use our code
-State full instructions on how to run our code, how to reproduce obtained results, give overview of architecture of our code (what are the different files, what they contain)
+This repository contains our submission for [project 1](https://github.com/epfml/ML_course/blob/master/projects/project1/project1_description.pdf) of the course Machine Learning CS-433 at EPFL.
 
 
 ### Installation
+The project has been developed in Python 3.6. Required packages for running the project are listed in the requirements.txt file and can be installed with:
+
+```
+pip3 install --user --requirement requirements.txt
+```
+
+Note that we employed the libraries `pandas`, `matplotlib`, `seaborn` and `sklearn` only for visualisation purposes in the preprocessing and hyperparameter-tuning phase and that they are not needed to train or run the models.
+
+To train, test and make predictions with our models on the given data sets, run:
+
+```
+  python3 run.py
+``` 
+
+The training data can be downloaded as a zip file [here](https://github.com/epfml/ML_course/blob/master/projects/project1/data/train.csv.zip?raw=true=)
+and the test data [here](https://github.com/epfml/ML_course/blob/master/projects/project1/data/test.csv.zip?raw=true).
+
+
+Our final predictions can be found in the file `XXX`.
 
 
 
@@ -26,6 +44,8 @@ We gathered all our preprocessing functions in this file,
 
 ##### project1.ipynb
 
+
+
 ##### run.py
 
 ##### utils.py
@@ -40,4 +60,8 @@ To run our project, simply execute run.py in your terminal.
 
 ### Authors
 
-Devrim Celik, Xavier Oliva and Nina Mainusch
+The authors (team \[ShoesOrLose]) of this repository are:
+- Devrim Celik (@Devrim-Celik)
+- Xavier Oliva i Jürgens (@xavoliva6)
+- Nina Mainusch (@Nina-Mainusch)
+
