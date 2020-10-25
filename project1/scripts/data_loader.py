@@ -32,6 +32,7 @@ def download_url(url, save_path, chunk_size=128):
 def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
              feature_expansion=False, correlation_analysis=False,
              class_equalizer=False, M=4):
+
     """
     Data supplying function.
 
@@ -79,7 +80,7 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
         ids_te = np.load(config.PREPROCESSED_IDS_TE_GROUPS_NPY, allow_pickle=True)
 
     else:
-        print("[*] Creating preprocessed Data")
+        #print("[*] Creating preprocessed Data")
 
         if not (os.path.isdir(config.DATA_PATH) and os.path.isfile(config.TRAIN_DATA_CSV_PATH) and os.path.isfile(
                 config.TEST_DATA_CSV_PATH)):

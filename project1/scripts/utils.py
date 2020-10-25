@@ -99,3 +99,10 @@ def build_k_indices(y, k):
     k_indices = [indices[k_iteration * fold_interval: (k_iteration + 1) * fold_interval] for k_iteration in range(k)]
 
     return np.array(k_indices)
+
+def transform_log_dict_to_param_dict(log_dict):
+    # TODO
+    #param_dict = {}
+    #for group_indx in range(1,7):
+    #    param_dict = {group_indx:{}}
+    pass
