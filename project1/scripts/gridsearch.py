@@ -112,10 +112,13 @@ if __name__ == "__main__":
     class_equalizer = [True, False]
     K = 2
     kkk = "---- "
+
     # create log folder
     Path(LOG_PATH).mkdir(exist_ok=True)
+    # define the name of the log file
     log_file_name = "log_gridsearch_" + START_TIME + ".json"
-    log_dict = {}
+    # log data is a dictionary, with groups as indexes
+    log_dict = {group_indx:[] for group_indx in range(1,7)}
 
     for m in M:
         for z_outlier_bool in z_outlier:
@@ -132,9 +135,10 @@ if __name__ == "__main__":
 
                     # for each group...
                     for group_indx, (X_tr, Y_tr, X_te, Y_te_indx) in enumerate(
-                            zip(groups_tr_X, groups_tr_Y, groups_te_X, indc_list_te)):
-                        # print("=" * 240)
-                        print(kkk * 2 + f"Group: {group_indx + 1}")
+                            zip(groups_tr_X, groups_tr_Y, groups_te_X, indc_list_te), start=1):
+                        #print("=" * 240)
+                        print(kkk*2 + f"Group: {group_indx}")
+
 
                         # get the shape of the sample array
                         N, D = X_tr.shape
@@ -183,8 +187,10 @@ if __name__ == "__main__":
                             if i == index_best_total[1]:
                                 best_params = params
 
-                        # writing best setup into the log
+                        # each tuple (acc, {parameters/function}) will be
+                        # appended to the list of the corresponding group
                         with open(LOG_PATH + "/" + log_file_name, "w") as f:
+<<<<<<< Updated upstream
                             log_dict[group_indx + 1] = {"function": f_best_name,
                                                         "accuracy": acc_best_total,
                                                         "params": best_params,
@@ -192,4 +198,14 @@ if __name__ == "__main__":
                                                         "Z": z_outlier_bool,
                                                         "CA": correlation_analysis_bool,
                                                         "CE": class_equalizer_bool}
+=======
+                            log_dict[group_indx].append((acc_best_total,
+                                {"function":f_best_name,
+                                "params":best_params,
+                                "M":m,
+                                "Z":z_outlier_bool,
+                                "CA":correlation_analysis_bool,
+                                "CE":class_equalizer_bool
+                                }))
+>>>>>>> Stashed changes
                             json.dump(log_dict, f, indent=4)

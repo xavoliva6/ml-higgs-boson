@@ -29,6 +29,14 @@ def download_url(url, save_path, chunk_size=128):
         zip_ref.extractall(config.DATA_PATH)
 
 
+def make_to_list(value):
+    if isinstance(value, int) or isinstance(value, bool) :
+        value = [value] * 6
+    elif isinstance(value, list):
+        if len(value) != 6:
+            raise TypeError
+    return value
+
 def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
              feature_expansion=False, correlation_analysis=False,
              class_equalizer=False, M=4):
@@ -81,8 +89,6 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
         ids_te = np.load(config.PREPROCESSED_IDS_TE_GROUPS_NPY, allow_pickle=True)
 
     else:
-        # print("[*] Creating preprocessed Data")
-
         if not (os.path.isdir(config.DATA_PATH) and os.path.isfile(config.TRAIN_DATA_CSV_PATH) and os.path.isfile(
                 config.TEST_DATA_CSV_PATH)):
             if not (os.path.isdir(config.DATA_PATH)):
@@ -99,25 +105,27 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
 
         nr_groups_tr = len(indc_list_tr)
 
-        if isinstance(M, int):
-            M = [M] * nr_groups_tr
-        elif isinstance(M, list):
-            if len(M) != nr_groups_tr:
-                raise TypeError
+        # make to lists
+        z_outlier = make_to_list(z_outlier)
+        class_equalizer = make_to_list(class_equalizer)
+        correlation_analysis = make_to_list(correlation_analysis)
+        M = make_to_list(M)
+
 
         for indx in range(nr_groups_tr):
             # perform z outlier detection
-            if z_outlier:
+
+            if z_outlier[indx]:
                 groups_tr_X[indx] = z_score_outlier_detection(groups_tr_X[indx], thresh=config.Z_VALUE)
                 groups_te_X[indx] = z_score_outlier_detection(groups_te_X[indx], thresh=config.Z_VALUE)
 
             # perform correlation analysis
-            if correlation_analysis:
+            if correlation_analysis[indx]:
                 groups_tr_X[indx], columns_to_keep = corr_filter(groups_tr_X[indx], threshold=0.95)
                 groups_te_X[indx] = groups_te_X[indx][:, columns_to_keep]
 
             # perform class equalization
-            if class_equalizer:
+            if class_equalizer[indx]:
                 groups_tr_X[indx], groups_tr_Y[indx] = class_imbalance_equalizer(groups_tr_X[indx], groups_tr_Y[indx])
 
             # perform feature expansion

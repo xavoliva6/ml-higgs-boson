@@ -105,8 +105,10 @@ def least_squares(y, tx, **kwargs):
 
     N, D = tx.shape
     # compute w using explicit solution
-    w = np.linalg.solve(tx.T @ tx, tx.T @ y)
-
+    try:
+        w = np.linalg.solve(tx.T @ tx, tx.T @ y)
+    except:
+        w = np.linalg.lstsq(tx.T @ tx, tx.T @ y)
     # calculate loss
     y_pred = tx @ w
     loss = calculate_mse_loss(y, y_pred)

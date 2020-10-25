@@ -13,7 +13,6 @@ from config import IMPLEMENTATIONS, SUBMISSION_PATH
 
 np.random.seed(0)
 
-
 def generate_submission(ids_te, Y_te):
     """
     A short description.
@@ -56,12 +55,13 @@ def generate_best(param_dict=None, log_param_dict_path="../data/logs/best.json")
     M_list = [param_dict[str(group_indx)]["M"] for group_indx in range(1,7)]
     class_equalizer_list = [param_dict[str(group_indx)]["class_eq"] for group_indx in range(1,7)]
     z_outlier_list = [param_dict[str(group_indx)]["z_outlier"] for group_indx in range(1,7)]
+    corr_anal_list = [param_dict[str(group_indx)]["corr_anal"] for group_indx in range(1,7)]
 
     # divide the dataset into the multiple groups and preprocess it
     # TODO change preexisting to False
     groups_tr_X, groups_tr_Y, indc_list_tr, groups_te_X, groups_te_Y, indc_list_te, ids_te = get_data(
-        use_preexisting=True, save_preprocessed=True, z_outlier=z_outlier_list, feature_expansion=True,
-        correlation_analysis=False, class_equalizer=class_equalizer_list, M=M_list)
+        use_preexisting=False, save_preprocessed=True, z_outlier=z_outlier_list, feature_expansion=True,
+        correlation_analysis=corr_anal_list, class_equalizer=class_equalizer_list, M=M_list)
     # numpy array for submission
     Y_te = np.zeros(shape=(568238,))
 
@@ -85,9 +85,10 @@ def generate_best(param_dict=None, log_param_dict_path="../data/logs/best.json")
     generate_submission(ids_te, Y_te)
 
 if __name__=="__main__":
-    # example
+
     best_dictionary = {"1":{
                             "M":5,
+                            "corr_anal":True,
                             "class_eq":False,
                             "z_outlier":False,
                             "function_name":"Ridge Regression",
@@ -95,6 +96,7 @@ if __name__=="__main__":
                             },
                         "2":{
                             "M":5,
+                            "corr_anal":True,
                             "class_eq":False,
                             "z_outlier":False,
                             "function_name":"Ridge Regression",
@@ -103,12 +105,14 @@ if __name__=="__main__":
                         "3":{
                             "M":5,
                             "class_eq":False,
+                            "corr_anal":True,
                             "z_outlier":False,
                             "function_name":"Ridge Regression",
                             "params": [None, None, 0.8]
                             },
                         "4":{
                             "M":5,
+                            "corr_anal":True,
                             "class_eq":False,
                             "z_outlier":False,
                             "function_name":"Ridge Regression",
@@ -116,6 +120,7 @@ if __name__=="__main__":
                             },
                         "5":{
                             "M":5,
+                            "corr_anal":True,
                             "class_eq":False,
                             "z_outlier":False,
                             "function_name":"Ridge Regression",
@@ -123,10 +128,11 @@ if __name__=="__main__":
                             },
                         "6":{
                             "M":5,
+                            "corr_anal":True,
                             "class_eq":False,
                             "z_outlier":False,
                             "function_name":"Ridge Regression",
                             "params": [None, None, 0.8]
                             }
                         }
-    generate_best(best_dictionary)
+    generate_best()

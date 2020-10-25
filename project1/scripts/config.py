@@ -39,13 +39,13 @@ GROUP_COL_FILTERED_TUPLE = (
 IMPLEMENTATIONS = {
     "Least Squares Gradient Descent": {
         "function": least_squares_GD,
-        "max_iters_list": [70],
+        "max_iters_list": [10],
         "gammas": [0.05],
         "lambdas": [None],
     },
     "Least Squares Stochastic GD": {
         "function": least_squares_SGD,
-        "max_iters_list": [10000],
+        "max_iters_list": [10],
         "gammas": [0.1],
         "lambdas": [None],
     },
@@ -63,25 +63,25 @@ IMPLEMENTATIONS = {
     },
     "Logistic Regression": {
         "function": logistic_regression,
-        "max_iters_list": [100],
+        "max_iters_list": [10],
         "gammas": [0.01],
         "lambdas": [None]
     },
     "Regularized Logistic Regression": {
         "function": reg_logistic_regression,
-        "max_iters_list": [100],
+        "max_iters_list": [10],
         "gammas": [0.01],
         "lambdas": [0.1]
     },
     "Support Vector Machine": {
         "function": support_vector_machine_GD,
-        "max_iters_list": [200],
+        "max_iters_list": [10],
         "gammas": [0.1],
         "lambdas": [0.1]
     },
     "Least Squares Mini-Batch GD": {
         "function": least_squares_BGD,
-        "max_iters_list": [100],
+        "max_iters_list": [10],
         "gammas": [0.5],
         "lambdas": [None]
     },
