@@ -50,7 +50,7 @@ IMPLEMENTATIONS = {
     "Least Squares Stochastic GD": {
         "function": least_squares_SGD,
         "max_iters_list": [10],
-        "gammas": [0.1],
+        "gammas": [0.001],
         "lambdas": [None],
     },
     "Least Squares using Pseudo-Inverse": {
@@ -63,7 +63,7 @@ IMPLEMENTATIONS = {
         "function": ridge_regression,
         "max_iters_list": [None],
         "gammas": [None],
-        "lambdas": [0.01]
+        "lambdas": [0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00005, 0.00001]
     },
     "Logistic Regression": {
         "function": logistic_regression,

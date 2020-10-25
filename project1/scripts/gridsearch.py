@@ -80,18 +80,17 @@ def cross_validation(k, X, y, params, regression):
     # finally, generate the means
     mean_loss_val = np.array(losses).mean()
     mean_acc_val = np.array(accuracies).mean()
-    # print(kkk*4 + f"\t [==>] Val_Loss: {mean_loss_val:.2f} | Val_Acc: {mean_acc_val:.2f}")
 
     return mean_loss_val, mean_acc_val
 
 
 if __name__ == "__main__":
-    M = [30, 5]
+    M = list(range(1,31,5))
     z_outlier = [True, False]
     correlation_analysis = [True, False]
     class_equalizer = [True, False]
-    K = 2
-    kkk = "---- "
+    K = 4
+    pretty_print = "---- "
 
     # create log folder
     Path(LOG_PATH).mkdir(exist_ok=True)
@@ -117,7 +116,7 @@ if __name__ == "__main__":
                     for group_indx, (X_tr, Y_tr, X_te, Y_te_indx) in enumerate(
                             zip(groups_tr_X, groups_tr_Y, groups_te_X, indc_list_te), start=1):
                         # print("=" * 240)
-                        print(kkk * 2 + f"Group: {group_indx}")
+                        print(pretty_print * 2 + f"Group: {group_indx}")
 
                         # get the shape of the sample array
                         N, D = X_tr.shape
@@ -128,7 +127,7 @@ if __name__ == "__main__":
 
                         # go through each function
                         for j, [f_name, f] in enumerate(IMPLEMENTATIONS.items()):
-                            print(kkk * 3 + f"Function: {f_name}...")
+                            print(pretty_print * 3 + f"Function: {f_name}...")
                             # create grid for grid search
                             grid = itertools.product(f["max_iters_list"], f["gammas"], f["lambdas"])
                             nr_configs = len(f["max_iters_list"]) * len(f["gammas"]) * len(f["lambdas"])
@@ -148,8 +147,7 @@ if __name__ == "__main__":
                             # get values of best method of this regressionrun
                             index_best = int(np.argmax(acc_array_val))
                             acc_val_best = acc_array_val[index_best]
-                            # print(kkk*4 +
-                            #       f"[+] Best {f_name} with an accuracy of {acc_val_best} - max_iters: {params[0]}, gamma: {params[1]}, lambda: {params[2]}")
+
                             if acc_val_best > acc_best_total:
                                 acc_best_total = acc_val_best
                                 index_best_total = (j, index_best)
