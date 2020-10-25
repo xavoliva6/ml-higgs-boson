@@ -1,5 +1,16 @@
 TODOS:
 
+Nina:
+1. DELETE unused files (Devrim)
+2. complete requirements
+3. Check ReadMe
+4. Finish report
+5. Final parameter values
+6. Heatmap for optimal values
+
+
+
+
 1. Class Imbalance (SMOTE is suuuper slow, ... maybe use PCA instead?)
 2. When using Polynomial Feature Augmentation, LS-SGD and LS procude huge errors...
   - in some occurences, it even influence ridge regression and makes it waaay worse
