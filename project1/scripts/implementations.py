@@ -1,5 +1,6 @@
 import config
 import numpy as np
+
 from utils import calculate_mse_loss, sigmoid, calculate_logistic_loss, calculate_hinge_loss, \
     convert_class_labels_logistic
 

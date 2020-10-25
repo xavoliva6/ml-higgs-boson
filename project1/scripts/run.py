@@ -1,16 +1,15 @@
 import datetime
-
-import numpy as np
-import os.path
 import json
 import sys
+import numpy as np
+from pathlib import Path
 
-from utils import calculate_mse_loss, calculate_acc, cross_validation_iter, build_k_indices, sigmoid, create_labels, \
-    transform_log_dict_to_param_dict
+from utils import transform_log_dict_to_param_dict
 from proj1_helpers import predict_labels, create_csv_submission
 from data_loader import get_data
 from config import IMPLEMENTATIONS, SUBMISSION_PATH
 
+START_TIME = datetime.datetime.now().strftime("%m_%d_%Y-%H_%M")
 np.random.seed(0)
 
 def generate_submission(ids_te, Y_te):
@@ -32,11 +31,12 @@ def generate_submission(ids_te, Y_te):
 
     # generate submission
     print("[!] Generating Submission...")
-    date_time = datetime.datetime.now().strftime("%m_%d_%Y-%H_%M")
+    date_time = START_TIME
     # TODO replace whitespaces in function names
     csv_name = f"HB_SUBMISSION_{date_time}.csv"
-    if not (os.path.isdir(SUBMISSION_PATH)):
-        os.mkdir(SUBMISSION_PATH)  # create submission directory
+
+    Path(SUBMISSION_PATH).mkdir(exist_ok=True)
+
     create_csv_submission(ids_te, Y_te, csv_name, SUBMISSION_PATH)
     print(f"[+] Submission {csv_name} was generated!")
 

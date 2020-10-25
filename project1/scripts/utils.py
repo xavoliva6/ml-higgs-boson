@@ -1,6 +1,5 @@
 import numpy as np
 
-
 def calculate_acc(y, y_pred):
     N = y_pred.shape[0]
     y_pred[y_pred < 0] = -1

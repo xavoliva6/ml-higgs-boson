@@ -1,7 +1,4 @@
-import numpy as np
-import datetime
-from implementations import least_squares_GD, least_squares_SGD, least_squares, ridge_regression, logistic_regression, \
-    reg_logistic_regression, support_vector_machine_GD, least_squares_BGD
+from implementations import *
 
 DATA_PATH = "../data"
 

@@ -1,7 +1,8 @@
-import numpy as np
 import os
 import zipfile
 import requests
+import numpy as np
+from pathlib import Path
 
 from proj1_helpers import load_csv_data
 from preprocessing import standardize, add_bias, augment_features_polynomial, split_groups,\
@@ -91,10 +92,11 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
     else:
         if not (os.path.isdir(config.DATA_PATH) and os.path.isfile(config.TRAIN_DATA_CSV_PATH) and os.path.isfile(
                 config.TEST_DATA_CSV_PATH)):
-            if not (os.path.isdir(config.DATA_PATH)):
-                os.mkdir(config.DATA_PATH)
+            Path(config.DATA_PATH).mkdir(exist_ok=True)
             download_url(config.TRAIN_URL, config.TRAIN_DATA_CSV_PATH)
             download_url(config.TEST_URL, config.TEST_DATA_CSV_PATH)
+
+        print("[*] Creating preprocessed Data")
 
         # load data from csv files
         Y_tr, X_tr, ids_tr = load_csv_data(config.TRAIN_DATA_CSV_PATH)
@@ -114,7 +116,6 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
 
         for indx in range(nr_groups_tr):
             # perform z outlier detection
-
             if z_outlier[indx]:
                 groups_tr_X[indx] = z_score_outlier_detection(groups_tr_X[indx], thresh=config.Z_VALUE)
                 groups_te_X[indx] = z_score_outlier_detection(groups_te_X[indx], thresh=config.Z_VALUE)
@@ -144,8 +145,7 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
             print(f"\t [+]Group {indx + 1} finished!")
 
         if save_preprocessed:
-            if not os.path.isdir(config.PREPROCESSED_PATH):
-                os.mkdir(config.PREPROCESSED_PATH)
+            Path(config.PREPROCESSED_PATH).mkdir(exist_ok=True)
 
             np.save(config.PREPROCESSED_X_TR_GROUPS_NPY, groups_tr_X, allow_pickle=True)
             np.save(config.PREPROCESSED_Y_TR_GROUPS_NPY, groups_tr_Y, allow_pickle=True)

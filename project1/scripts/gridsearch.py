@@ -1,13 +1,10 @@
 import datetime
-
-import numpy as np
-import os.path
 import itertools
-from pathlib import Path
 import json
+import numpy as np
+from pathlib import Path
 
 from utils import calculate_mse_loss, calculate_acc, cross_validation_iter, build_k_indices, sigmoid, create_labels
-from proj1_helpers import predict_labels, create_csv_submission
 from data_loader import get_data
 from config import IMPLEMENTATIONS, LOG_PATH
 
@@ -76,33 +73,6 @@ def cross_validation(k, X, y, params, regression):
     # print(kkk*4 + f"\t [==>] Val_Loss: {mean_loss_val:.2f} | Val_Acc: {mean_acc_val:.2f}")
 
     return mean_loss_val, mean_acc_val
-
-
-def generate_submission(ids_te, Y_te):
-    """
-    A short description.
-
-    A bit longer description.
-
-    Args:
-        variable (type): description
-
-    Returns:
-        type: description
-
-    Raises:
-        Exception: description
-
-    """
-
-    # generate submission
-    print("[!] Generating Submission...")
-    # TODO replace whitespaces in function names
-    csv_name = f"HB_SUBMISSION_{START_TIME}.csv"
-    if not (os.path.isdir(SUBMISSION_PATH)):
-        os.mkdir(SUBMISSION_PATH)
-    create_csv_submission(ids_te, Y_te, csv_name, SUBMISSION_PATH)
-    print(f"[+] Submission {csv_name} was generated!")
 
 
 if __name__ == "__main__":
@@ -190,15 +160,6 @@ if __name__ == "__main__":
                         # each tuple (acc, {parameters/function}) will be
                         # appended to the list of the corresponding group
                         with open(LOG_PATH + "/" + log_file_name, "w") as f:
-<<<<<<< Updated upstream
-                            log_dict[group_indx + 1] = {"function": f_best_name,
-                                                        "accuracy": acc_best_total,
-                                                        "params": best_params,
-                                                        "M": m,
-                                                        "Z": z_outlier_bool,
-                                                        "CA": correlation_analysis_bool,
-                                                        "CE": class_equalizer_bool}
-=======
                             log_dict[group_indx].append((acc_best_total,
                                 {"function":f_best_name,
                                 "params":best_params,
@@ -207,5 +168,4 @@ if __name__ == "__main__":
                                 "CA":correlation_analysis_bool,
                                 "CE":class_equalizer_bool
                                 }))
->>>>>>> Stashed changes
                             json.dump(log_dict, f, indent=4)

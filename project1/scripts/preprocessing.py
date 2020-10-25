@@ -1,7 +1,6 @@
 import numpy as np
 import config
 
-
 def class_imbalance_equalizer(X, Y):
     """
     Function balancing unbalanced classes in a dataset.
@@ -66,8 +65,8 @@ def remove_redundant(X):
         # check if columns variance is not 0
         if np.var(X[:, col]) != 0:
             non_redundant_indc.append(col)
-        else:
-            print("FOUND REDUNDANT", col)
+        #else:
+        #    print("FOUND REDUNDANT", col)
     return X[:, non_redundant_indc]
 
 
