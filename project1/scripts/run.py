@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+This file is responsible for generating a submission.
+
+The generate_best() function of this script is given a dictionary, contain
+one entry for each missing value group (see exploratory_data_analysis.ipynb),
+with each entry being a dictionary with the best setting. This dictionary can
+either be directly supplied to the generate_best() function, or, if not
+supplied, the function will look in the /log folder with the name best.json and
+will determine the best setting for each group automatically.
+"""
+
 import datetime
 import json
 import sys

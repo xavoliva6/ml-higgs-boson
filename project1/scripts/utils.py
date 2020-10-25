@@ -1,5 +1,9 @@
-import numpy as np
+# -*- coding: utf-8 -*-
+"""
+This file contains auxiliary functions.
+"""
 
+import numpy as np
 
 def calculate_acc(y, y_pred):
     N = y_pred.shape[0]

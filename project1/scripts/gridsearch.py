@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+This file is responsible for peforming a gridsearch and logging all
+corresponding accuracies.
+
+In the main function of this script, we first iterate over each possible
+permutation of preprocessing settings. Then, for each of the missing value
+groups (see exploratory_data_analysis.ipynb) we iterate over all avaiable
+functions, over different parameter settings.
+"""
+
 import datetime
 import itertools
 import json
@@ -10,7 +21,6 @@ from config import IMPLEMENTATIONS, LOG_PATH
 
 START_TIME = datetime.datetime.now().strftime("%m_%d_%Y-%H_%M")
 np.random.seed(0)
-
 
 def cross_validation(k, X, y, params, regression):
     """

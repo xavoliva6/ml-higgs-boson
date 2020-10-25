@@ -1,6 +1,10 @@
+# -*- coding: utf-8 -*-
+"""
+This file contains all function that related to preprocesing.
+"""
+
 import numpy as np
 import config
-
 
 def class_imbalance_equalizer(X, Y):
     """

@@ -1,3 +1,14 @@
+# -*- coding: utf-8 -*-
+"""
+This file is responsible for supplying data to both gridsearch.py and run.py.
+
+If the csv files are not given in the designated path (see config.py), this
+script downloads both training and test csv form the Github repository.
+In the next step, training and test data is loaded and split into groups, in
+respect to their missing values (see exploratory_data_analysis.ipynb).
+Finally, each group is preprocessed according to given parameters.
+"""
+
 import os
 import zipfile
 import requests
@@ -41,7 +52,7 @@ def make_to_list(value):
 
 def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
              feature_expansion=False, correlation_analysis=False,
-             class_equalizer=False, M=4):
+             class_equalizer=False, M=4, z_value=3.0):
     """
     Data supplying function.
 
@@ -98,7 +109,7 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
 
         print("[*] Creating preprocessed Data")
 
-        # load data from csv files
+        # load data from csv filesconfig.Z_VALUE
         Y_tr, X_tr, ids_tr = load_csv_data(config.TRAIN_DATA_CSV_PATH)
         Y_te, X_te, ids_te = load_csv_data(config.TEST_DATA_CSV_PATH)
 
@@ -116,8 +127,8 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
         for indx in range(nr_groups_tr):
             # perform z outlier detection
             if z_outlier[indx]:
-                groups_tr_X[indx] = z_score_outlier_detection(groups_tr_X[indx], thresh=config.Z_VALUE)
-                groups_te_X[indx] = z_score_outlier_detection(groups_te_X[indx], thresh=config.Z_VALUE)
+                groups_tr_X[indx] = z_score_outlier_detection(groups_tr_X[indx], thresh=z_value)
+                groups_te_X[indx] = z_score_outlier_detection(groups_te_X[indx], thresh=z_value)
 
             # perform correlation analysis
             if correlation_analysis[indx]:

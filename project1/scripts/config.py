@@ -1,3 +1,15 @@
+# -*- coding: utf-8 -*-
+"""
+This file is contains global variables that are shared accross different
+scripts.
+
+The variables are either
+* paths to data / logs / submissions
+* dictionary that used in gridsearch
+* a tuple, used in order to split the groups according to missing values (see
+    exploratory_data_analysis.ipynb)
+"""
+
 from implementations import *
 
 DATA_PATH = "../data"
@@ -18,11 +30,6 @@ PREPROCESSED_X_TE_GROUPS_NPY = "../data/preprocessed/X_te.npy"
 PREPROCESSED_Y_TE_GROUPS_NPY = "../data/preprocessed/Y_te.npy"
 PREPROCESSED_IDS_TE_GROUPS_NPY = "../data/preprocessed/ids_te.npy"
 PREPROCESSED_GROUP_INDEX_TE_NPY = "../data/preprocessed/group_indx_te.npy"
-
-SUBMISSION_PATH = "../data/submissions"
-
-Z_VALUE = 3.0
-GRAD_STOP_CONDITION = 1e-15
 
 GROUP_COL_FILTERED_TUPLE = (
     (),  # GROUP 1 (all columns)
