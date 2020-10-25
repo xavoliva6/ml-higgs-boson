@@ -5,7 +5,18 @@ This file contains auxiliary functions.
 
 import numpy as np
 
+
 def calculate_acc(y, y_pred):
+    """
+    Calculate the accuracy of a prediction.
+
+    Args:
+        y (ndarray): provided labels
+        y_pred (ndarray): predicted labels
+
+    Returns:
+        float: accuracy value
+    """
     N = y_pred.shape[0]
     y_pred[y_pred < 0] = -1
     y_pred[y_pred >= 0] = 1
@@ -13,22 +24,57 @@ def calculate_acc(y, y_pred):
 
 
 def calculate_mse(e):
-    """Calculate the mse for error vector e."""
+    """
+    Calculate the mean squared error for error vector e.
+
+    Args:
+        e (ndarray): error vector
+
+    Returns:
+        float: mean squared error value
+    """
     return 1 / 2 * np.mean(e ** 2)
 
 
 def calculate_mae(e):
-    """Calculate the mae for error vector e."""
+    """
+    Calculate the mean absolute error for error vector e.
+
+    Args:
+        e (ndarray): error vector
+
+    Returns:
+        float: mean absolute error value
+    """
     return np.mean(np.abs(e))
 
 
 def calculate_mse_loss(y, y_pred):
-    """Calculate the loss."""
+    """
+    Calculate the MSE loss of a prediction.
+
+    Args:
+        y (ndarray): provided labels
+        y_pred (ndarray): predicted labels
+
+    Returns:
+        float: mean squared error value
+    """
     e = y - y_pred
     return calculate_mse(e)
 
 
 def create_labels(y_regression):
+    """
+    Create class labels for labels created using regression. Negative values are mapped to -1, while positive
+    values are mapped to 0.
+
+    Args:
+        y_regression (ndarray): regression labels
+
+    Returns:
+        ndarray: class labels
+    """
     """Generates class labels given regression labels"""
     y_class = np.zeros_like(y_regression)
     y_class[np.where(y_regression <= 0)] = -1
@@ -38,7 +84,18 @@ def create_labels(y_regression):
 
 
 def sigmoid(x):
-    """Numerically stable sigmoid function."""
+    """
+    Numerically stable sigmoid function, as seen in:
+    https://timvieira.github.io/blog/post/2014/02/11/exp-normalize-trick/
+    Sigmoid function is expressed in two different ways, each version covers an
+    extreme case: x=inf and x=−inf, respectively
+
+    Args:
+        x (ndarray): input of the sigmoid function
+
+    Returns:
+        ndarray: output of the sigmoid function
+    """
     return np.piecewise(x, [x > 0], [
         lambda i: 1 / (1 + np.exp(-i)),
         lambda i: np.exp(i) / (1 + np.exp(i))
@@ -46,41 +103,92 @@ def sigmoid(x):
 
 
 def convert_class_labels_logistic(y: np.ndarray):
-    """convert from interval [-1, 1] to [0, 1]"""
+    """
+    Convert labels from the values {-1, 1} to {0, 1}
+
+    Args:
+        y (ndarray): labels array
+
+    Returns:
+        ndarray: labels array with values {0, 1}
+    """
     if set(y) == {-1, 1}:
         y = ((y + 1) / 2).astype(int)
     return y
 
 
 def reconvert_class_labels_logistic(y: np.ndarray):
-    """convert from interval [0, 1] to [-1, 1]"""
+    """
+    Convert labels from the values {0, 1} to {-1, 1}
+
+    Args:
+        y (ndarray): labels array
+
+    Returns:
+        ndarray: labels array with values {-1, 1}
+    """
     if set(y) == {0, 1}:
         y = ((y * 2) - 1).astype(int)
     return y
 
 
 def calculate_logistic_loss(y, tx, w):
-    """compute the cost by negative log likelihood."""
+    """
+    Calculate the logistic loss.
+
+    Args:
+        y (ndarray): provided labels
+        tx (ndarray): samples array
+        w (ndarray): weights array
+
+    Returns:
+        float: logistic loss value
+    """
     N = len(y)
-    EPSILON = 1e-10
     pred = sigmoid(tx @ w)
     # https://ml-cheatsheet.readthedocs.io/en/latest/logistic_regression.html
     # https://stackoverflow.com/questions/38125319/python-divide-by-zero-encountered-in-log-logistic-regression
+    EPSILON = 1e-10
     loss = -1 / N * (y.T @ np.log(pred + EPSILON) + (1 - y).T @ np.log(1 - pred + EPSILON))
 
     return loss
 
 
 def calculate_hinge_loss(y, tx, w):
-    """calculate the hinge loss."""
+    """
+    Calculate the hinge loss.
+
+    Args:
+        y (ndarray): provided labels
+        tx (ndarray): samples array
+        w (ndarray): weights array
+
+    Returns:
+        float: hinge loss value
+    """
+    N, D = tx.shape
     # https://medium.com/@saishruthi.tn/support-vector-machine-using-numpy-846f83f4183d
-    c_x = np.ones(shape=tx.shape[0]) - y * (tx @ w)
+    c_x = np.ones(shape=N) - y * (tx @ w)
     c_x = np.clip(c_x, a_min=0, a_max=np.inf)
     return c_x.mean()
 
 
 def cross_validation_iter(y, x, k_indices, k_iteration):
-    """Compute cross validation for a single iteration."""
+    """
+    Compute cross validation for a single iteration.
+
+    Args:
+        y (ndarray): provided labels
+        x (ndarray): samples array
+        k_indices (ndarray): indices of cross validation of all iterations
+        k_iteration (int): index of current cross validation step
+
+    Returns:
+        ndarray: training set samples
+        ndarray: training set labels
+        ndarray: validation set samples
+        ndarray: validation set labels
+    """
     k = k_indices.shape[0]
 
     val_index = k_indices[k_iteration]

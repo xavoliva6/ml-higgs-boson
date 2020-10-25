@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-This file is contains global variables that are shared accross different
+This file is contains global variables that are shared across different
 scripts.
 
 The variables are either
 * paths to data / logs / submissions
-* dictionary that used in gridsearch
+* dictionary that used in grid search
 * a tuple, used in order to split the groups according to missing values (see
     exploratory_data_analysis.ipynb)
 """

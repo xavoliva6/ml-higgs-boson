@@ -39,7 +39,6 @@ def generate_submission(ids_te, Y_te):
 
     Raises:
         Exception: description
-
     """
 
     # generate submission
@@ -55,6 +54,20 @@ def generate_submission(ids_te, Y_te):
 
 
 def generate_best(param_dict=None, log_param_dict_path="../data/logs/best.json"):
+    """
+    A short description.
+
+    A bit longer description.
+
+    Args:
+        variable (type): description
+
+    Returns:
+        type: description
+
+    Raises:
+        Exception: description
+    """
     # if not parameters are given manually, look for a log dictionary
     if not param_dict:
         try:

@@ -11,6 +11,7 @@ from utils import calculate_mse_loss, sigmoid, calculate_logistic_loss, calculat
 
 GRAD_STOP_CONDITION = 1e-15
 
+
 def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
     """
     Least squares regression using gradient descent.

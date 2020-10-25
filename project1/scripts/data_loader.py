@@ -29,6 +29,9 @@ def download_url(url, save_path, chunk_size=128):
         url (string): url to file to be downloaded
         save_path (string): path to save file
         chunk_size (int): size of chunk for download
+
+    Returns:
+        None
     """
 
     print(f"[*] Downloading from [{url}]")
@@ -77,7 +80,8 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
                                         and remove highly correlated features
         class_equalizer (bool): enabling this parameters will allow the function to
                             perform class balancing
-        M (Union[int, float]): feature expansion parameter per group
+        M (Union[int, list]): feature expansion parameter per group
+        z_value (Union[float, list]): outlier detection threshold per group
 
     Returns:
         list: groups of training samples
