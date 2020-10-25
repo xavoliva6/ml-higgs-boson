@@ -76,7 +76,7 @@ IMPLEMENTATIONS = {
     "Support Vector Machine": {
         "function": support_vector_machine_GD,
         "max_iters_list": [200],
-            "gammas": [0.1],
+        "gammas": [0.1],
         "lambdas": [0.1]
     },
     "Least Squares Mini-Batch GD": {

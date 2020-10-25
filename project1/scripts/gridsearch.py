@@ -11,7 +11,6 @@ from proj1_helpers import predict_labels, create_csv_submission
 from data_loader import get_data
 from config import IMPLEMENTATIONS, LOG_PATH
 
-
 START_TIME = datetime.datetime.now().strftime("%m_%d_%Y-%H_%M")
 np.random.seed(0)
 
@@ -28,7 +27,7 @@ def cross_validation(k, X, y, params, regression):
         X (nd.array): training samples of form N x D
         y (nd.array): training samples of form N
         params (dict): dictionary of training samples
-        regressions (function): regression function
+        regression (function): regression function
 
     Returns:
         float: mean loss on validation datasets
@@ -43,12 +42,12 @@ def cross_validation(k, X, y, params, regression):
     accuracies = []
     losses = []
 
-    #print(f"(max_iters: {params['max_iters']}, gamma: {params['gamma']}, lambda: {params['lambda_']})")
+    # print(f"(max_iters: {params['max_iters']}, gamma: {params['gamma']}, lambda: {params['lambda_']})")
     # each iteration for each split of training and validation
     for k_iteration in range(k):
-        # split the data accordingly into traning and validation
+        # split the data accordingly into training and validation
         X_train, Y_train, X_val, Y_val = cross_validation_iter(y, X, k_indices, k_iteration)
-        # intitial weights
+        # initial weights
         W_init = np.random.rand(D, )
         # initialize dictionary for the training regression model
         args_train = {"tx": X_train, "y": Y_train, "initial_w": W_init, "max_iters": params["max_iters"],
@@ -74,7 +73,7 @@ def cross_validation(k, X, y, params, regression):
     # finally, generate the means
     mean_loss_val = np.array(losses).mean()
     mean_acc_val = np.array(accuracies).mean()
-    #print(kkk*4 + f"\t [==>] Val_Loss: {mean_loss_val:.2f} | Val_Acc: {mean_acc_val:.2f}")
+    # print(kkk*4 + f"\t [==>] Val_Loss: {mean_loss_val:.2f} | Val_Acc: {mean_acc_val:.2f}")
 
     return mean_loss_val, mean_acc_val
 
@@ -107,7 +106,7 @@ def generate_submission(ids_te, Y_te):
 
 
 if __name__ == "__main__":
-    M = [30,5]
+    M = [30, 5]
     z_outlier = [True, False]
     correlation_analysis = [True, False]
     class_equalizer = [True, False]
@@ -122,30 +121,32 @@ if __name__ == "__main__":
         for z_outlier_bool in z_outlier:
             for correlation_analysis_bool in correlation_analysis:
                 for class_equalizer_bool in class_equalizer:
-                    print("="*80)
-                    print(f" Preprocess Setup: M:{m} | ZOD:{z_outlier_bool} | CA:{correlation_analysis_bool} | CE:{class_equalizer_bool}")
+                    print("=" * 80)
+                    print(
+                        f" Preprocess Setup: M:{m} | ZOD:{z_outlier_bool} | CA:{correlation_analysis_bool} | CE:{class_equalizer_bool}")
                     # divide the dataset into the multiple groups and preprocess them
                     groups_tr_X, groups_tr_Y, indc_list_tr, groups_te_X, groups_te_Y, indc_list_te, ids_te = get_data(
-                        use_preexisting=False, save_preprocessed=False, z_outlier=z_outlier_bool, feature_expansion=True,
+                        use_preexisting=False, save_preprocessed=False, z_outlier=z_outlier_bool,
+                        feature_expansion=True,
                         correlation_analysis=correlation_analysis_bool, class_equalizer=class_equalizer_bool, M=m)
 
                     # for each group...
                     for group_indx, (X_tr, Y_tr, X_te, Y_te_indx) in enumerate(
                             zip(groups_tr_X, groups_tr_Y, groups_te_X, indc_list_te)):
-                        #print("=" * 240)
-                        print(kkk*2 + f"Group: {group_indx + 1}")
+                        # print("=" * 240)
+                        print(kkk * 2 + f"Group: {group_indx + 1}")
 
                         # get the shape of the sample array
                         N, D = X_tr.shape
 
-                        # initialize parametersz_outlier_bool
+                        # initialize parameters z_outlier_bool
                         index_best_total = 0
                         acc_best_total = 0
 
                         # go through each function
                         for j, [f_name, f] in enumerate(IMPLEMENTATIONS.items()):
-                            print(kkk*3 + f"Function: {f_name}...")
-                            # create grid for gridsearch
+                            print(kkk * 3 + f"Function: {f_name}...")
+                            # create grid for grid search
                             grid = itertools.product(f["max_iters_list"], f["gammas"], f["lambdas"])
                             nr_configs = len(f["max_iters_list"]) * len(f["gammas"]) * len(f["lambdas"])
                             # array for saving accuracy
@@ -164,7 +165,7 @@ if __name__ == "__main__":
                             # get values of best method of this regressionrun
                             index_best = int(np.argmax(acc_array_val))
                             acc_val_best = acc_array_val[index_best]
-                            #print(kkk*4 +
+                            # print(kkk*4 +
                             #       f"[+] Best {f_name} with an accuracy of {acc_val_best} - max_iters: {params[0]}, gamma: {params[1]}, lambda: {params[2]}")
                             if acc_val_best > acc_best_total:
                                 acc_best_total = acc_val_best
@@ -184,11 +185,11 @@ if __name__ == "__main__":
 
                         # writing best setup into the log
                         with open(LOG_PATH + "/" + log_file_name, "w") as f:
-                            log_dict[group_indx+1] = {"function":f_best_name,
-                                "accuracy": acc_best_total,
-                                "params":best_params,
-                                "M":m,
-                                "Z":z_outlier_bool,
-                                "CA":correlation_analysis_bool,
-                                "CE":class_equalizer_bool}
+                            log_dict[group_indx + 1] = {"function": f_best_name,
+                                                        "accuracy": acc_best_total,
+                                                        "params": best_params,
+                                                        "M": m,
+                                                        "Z": z_outlier_bool,
+                                                        "CA": correlation_analysis_bool,
+                                                        "CE": class_equalizer_bool}
                             json.dump(log_dict, f, indent=4)

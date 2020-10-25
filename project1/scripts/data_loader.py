@@ -57,6 +57,7 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
                                         and remove highly correlated features
         class_equalizer (bool): enabling this parameters will allow the function to
                             perform class balancing
+        M (Union[int, float]): feature expansion parameter per group
 
     Returns:
         list: groups of training samples
@@ -80,7 +81,7 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
         ids_te = np.load(config.PREPROCESSED_IDS_TE_GROUPS_NPY, allow_pickle=True)
 
     else:
-        #print("[*] Creating preprocessed Data")
+        # print("[*] Creating preprocessed Data")
 
         if not (os.path.isdir(config.DATA_PATH) and os.path.isfile(config.TRAIN_DATA_CSV_PATH) and os.path.isfile(
                 config.TEST_DATA_CSV_PATH)):
@@ -96,7 +97,15 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
         groups_tr_Y, groups_tr_X, indc_list_tr = split_groups(Y_tr, X_tr)
         groups_te_Y, groups_te_X, indc_list_te = split_groups(Y_te, X_te)
 
-        for indx in range(len(indc_list_tr)):
+        nr_groups_tr = len(indc_list_tr)
+
+        if isinstance(M, int):
+            M = [M] * nr_groups_tr
+        elif isinstance(M, list):
+            if len(M) != nr_groups_tr:
+                raise TypeError
+
+        for indx in range(nr_groups_tr):
             # perform z outlier detection
             if z_outlier:
                 groups_tr_X[indx] = z_score_outlier_detection(groups_tr_X[indx], thresh=config.Z_VALUE)
@@ -113,8 +122,8 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
 
             # perform feature expansion
             if feature_expansion:
-                groups_tr_X[indx] = augment_features_polynomial(groups_tr_X[indx], M=M)
-                groups_te_X[indx] = augment_features_polynomial(groups_te_X[indx], M=M)
+                groups_tr_X[indx] = augment_features_polynomial(groups_tr_X[indx], M=M[indx])
+                groups_te_X[indx] = augment_features_polynomial(groups_te_X[indx], M=M[indx])
 
             # standardize features
             groups_tr_X[indx] = standardize(groups_tr_X[indx])

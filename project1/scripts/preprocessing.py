@@ -1,12 +1,13 @@
 import numpy as np
 import config
 
+
 def class_imbalance_equalizer(X, Y):
     """
     Function balancing unbalanced classes in a dataset.
 
     Determines underrepresented class (we assume that there are only 2 classes)
-    and creates synthetic samples by simplying copying preexisting samples.
+    and creates synthetic samples by simplifying copying preexisting samples.
 
     Args:
         X (ndarray): sample matrix [NxD]
@@ -45,7 +46,7 @@ def class_imbalance_equalizer(X, Y):
     Y_new[N:] = under_represented
 
     return X_new, Y_new
-    
+
 
 def remove_redundant(X):
     """
