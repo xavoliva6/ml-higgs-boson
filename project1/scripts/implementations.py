@@ -34,7 +34,7 @@ def least_squares_GD(y, tx, initial_w, max_iters, gamma, **kwargs):
         # update w by gradient descent update
         w -= gamma * grad
 
-        if np.max(w) > 1e4:
+        if np.max(w) > 1e9:
             raise ValueError('Least Squares GD diverged!!!')
 
     # calculate final loss
@@ -77,7 +77,7 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma, **kwargs):
         # update w by gradient descent update
         w -= gamma * grad
 
-        if np.max(w) > 1e4:
+        if np.max(w) > 1e9:
             raise ValueError('Least Squares SGD diverged!!!')
 
     # calculate loss
@@ -136,7 +136,7 @@ def ridge_regression(y, tx, lambda_, **kwargs):
     N, D = tx.shape
 
     # compute w using explicit solution
-    w = np.linalg.solve(tx.T @ tx + lambda_ * np.identity(D), tx.T @ y)
+    w = np.linalg.solve(tx.T @ tx + 2 * N * lambda_ * np.identity(D), tx.T @ y)
 
     # calculate loss
     y_pred = tx @ w
@@ -173,7 +173,7 @@ def logistic_regression(y, tx, initial_w, max_iters, gamma, **kwargs):
         # update w by gradient descent update
         w -= gamma * grad_log_regression
 
-        if np.max(w) > 1e4:
+        if np.max(w) > 1e9:
             raise ValueError('Logistic Regression diverged!!!')
 
     # calculate final loss
@@ -213,7 +213,7 @@ def reg_logistic_regression(y, tx, lambda_, initial_w, max_iters, gamma, **kwarg
         # update w by gradient descent update
         w -= gamma * grad_reg_log_regression
 
-        if np.max(w) > 1e4:
+        if np.max(w) > 1e9:
             raise ValueError('Regularized Logistic Regression diverged!!!')
 
     # calculate final loss
@@ -254,12 +254,12 @@ def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_, **kwa
         # compute gradient
         grad += -y[s_vec < 1] @ tx[s_vec < 1]
 
-        grad = 1 / N * (grad + lambda_ * w)
+        grad = 1 / N * (grad + 2 * lambda_ * w)
 
         # update w by gradient descent update
         w -= gamma * grad
 
-        if np.max(w) > 1e4:
+        if np.max(w) > 1e9:
             raise ValueError('Support Vector Machine diverged!!!')
 
     # calculate final loss
@@ -305,7 +305,7 @@ def least_squares_BGD(y, tx, initial_w, max_iters, gamma, batch_size=1024, **kwa
         # update w by gradient descent update
         w -= gamma / n_iter * grad
 
-        if np.max(w) > 1e4:
+        if np.max(w) > 1e9:
             raise ValueError('Least Squares mini-batch GD diverged!!!')
 
         norm_gradient = np.linalg.norm(grad)

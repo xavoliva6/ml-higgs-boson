@@ -2,11 +2,11 @@ import datetime
 
 import numpy as np
 import os.path
-import itertools
 import json
 import sys
 
-from utils import calculate_mse_loss, calculate_acc, cross_validation_iter, build_k_indices, sigmoid, create_labels, transform_log_dict_to_param_dict
+from utils import calculate_mse_loss, calculate_acc, cross_validation_iter, build_k_indices, sigmoid, create_labels, \
+    transform_log_dict_to_param_dict
 from proj1_helpers import predict_labels, create_csv_submission
 from data_loader import get_data
 from config import IMPLEMENTATIONS, SUBMISSION_PATH
@@ -36,7 +36,7 @@ def generate_submission(ids_te, Y_te):
     # TODO replace whitespaces in function names
     csv_name = f"HB_SUBMISSION_{date_time}.csv"
     if not (os.path.isdir(SUBMISSION_PATH)):
-        os.mkdir(SUBMISSION_PATH)    # the
+        os.mkdir(SUBMISSION_PATH)  # create submission directory
     create_csv_submission(ids_te, Y_te, csv_name, SUBMISSION_PATH)
     print(f"[+] Submission {csv_name} was generated!")
 
@@ -49,7 +49,7 @@ def generate_best(param_dict=None, log_param_dict_path="../data/logs/best.json")
                 log_dict = json.load(f)
                 param_dict = transform_log_dict_to_param_dict(log_dict)
         except OSError:
-            print(f"Could not open/read file: {fname}")
+            print(f"Could not open/read file: {log_param_dict_path}")
             sys.exit()
 
     M_list = [param_dict[str(group_indx)]["M"] for group_indx in range(1,7)]
@@ -72,14 +72,14 @@ def generate_best(param_dict=None, log_param_dict_path="../data/logs/best.json")
         N, D = X_tr.shape
         W_init = np.random.rand(D, )
         best_params_train = {"tx": X_tr, "y": Y_tr, "initial_w": W_init,
-                             "max_iters": param_dict[str(group_indx+1)]["params"][0],
-                             "gamma": param_dict[str(group_indx+1)]["params"][1],
-                             "lambda_": param_dict[str(group_indx+1)]["params"][2]}
+                             "max_iters": param_dict[str(group_indx + 1)]["params"][0],
+                             "gamma": param_dict[str(group_indx + 1)]["params"][1],
+                             "lambda_": param_dict[str(group_indx + 1)]["params"][2]}
 
         # train it on all available training data
-        W_best, _ = IMPLEMENTATIONS[param_dict[str(group_indx+1)]["function_name"]]["function"](**best_params_train)
+        W_best, _ = IMPLEMENTATIONS[param_dict[str(group_indx + 1)]["function_name"]]["function"](**best_params_train)
 
-        # write into the correpsonding indexes of this group
+        # write into the corresponding indexes of this group
         Y_te[Y_te_indx] = predict_labels(W_best, X_te)
 
     generate_submission(ids_te, Y_te)
