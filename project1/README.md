@@ -38,7 +38,6 @@ Our final predictions can be found in the file `XXX`.
 - **project1.ipynb:** 
 - **run.py:** our final predictions with optimal parameter values for the best models on the given data
 - **utils.py:** an assemblance of minor functions used troughout the project
-- **visualization.py:** functions used for visualising the data
 
 
 ### Authors
