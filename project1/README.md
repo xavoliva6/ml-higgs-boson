@@ -43,7 +43,7 @@ Our final predictions can be found in the file `XXX`.
 ### Authors
 
 The authors (team \[ShoesOrLose]) of this repository are:
-- Devrim Celik (@Devrim-Celik)
-- Xavier Oliva i Jürgens (@xavoliva6)
-- Nina Mainusch (@Nina-Mainusch)
+- Devrim Celik ([@Devrim-Celik](https://github.com/Devrim-Celik))
+- Xavier Oliva i Jürgens ([@xavoliva6](https://github.com/xavoliva6))
+- Nina Mainusch ([@Nina-Mainusch](https://github.com/Nina-Mainusch))
 
