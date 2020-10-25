@@ -204,7 +204,16 @@ def cross_validation_iter(y, x, k_indices, k_iteration):
 
 
 def build_k_indices(y, k):
-    """build k indices for k-fold cross-validation."""
+    """
+    Build k indices for k-fold cross-validation.
+
+    Args:
+        y (ndarray): provided labels
+        k (int): number of iterations
+
+    Returns:
+        ndarray: array of indices of all iterations
+    """
     N = len(y)
     fold_interval = int(N / k)
     indices = np.random.permutation(N)
@@ -214,15 +223,26 @@ def build_k_indices(y, k):
 
 
 def transform_log_dict_to_param_dict(log_dict):
+    """
+    For every group of the dataset, find the function-parameters combination with the highest accuracy
+    and create a dictionary with its values.
+
+    Args:
+        log_dict (dict): dictionary from logs
+
+    Returns:
+        dict: dictionary with function and parameters of the best function-parameters combination for every group
+    """
     param_dict = {}
     for group_indx in range(1, 7):
         best_acc_indx = np.argmax([t[0] for t in log_dict[str(group_indx)]])
         best_acc_dict = log_dict[str(group_indx)][best_acc_indx][1]
-        param_dict[str(group_indx)] = {"M": best_acc_dict["M"],
-                                       "corr_anal": best_acc_dict["CA"],
-                                       "class_eq": best_acc_dict["CE"],
-                                       "z_outlier": best_acc_dict["Z"],
-                                       "function_name": best_acc_dict["function"],
-                                       "params": best_acc_dict["params"]
-                                       }
+        param_dict[str(group_indx)] = {
+            "M": best_acc_dict["M"],
+            "corr_anal": best_acc_dict["CA"],
+            "class_eq": best_acc_dict["CE"],
+            "z_outlier": best_acc_dict["Z"],
+            "function_name": best_acc_dict["function"],
+            "params": best_acc_dict["params"]
+        }
     return param_dict

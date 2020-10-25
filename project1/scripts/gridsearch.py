@@ -86,7 +86,7 @@ def cross_validation(k, X, y, params, regression):
 
 
 if __name__ == "__main__":
-    M = list(range(1,31,5))
+    M = [1, 10, 20, 30]
     z_outlier = [True, False]
     correlation_analysis = [True, False]
     class_equalizer = [True, False]
@@ -106,7 +106,8 @@ if __name__ == "__main__":
                 for class_equalizer_bool in class_equalizer:
                     print("=" * 80)
                     print(
-                        f" Preprocess Setup: M:{m} | ZOD:{z_outlier_bool} | CA:{correlation_analysis_bool} | CE:{class_equalizer_bool}")
+                        f" Preprocess Setup: M:{m} | ZOD:{z_outlier_bool} | CA:{correlation_analysis_bool} | "
+                        f"CE:{class_equalizer_bool}")
                     # divide the dataset into the multiple groups and preprocess them
                     groups_tr_X, groups_tr_Y, indc_list_tr, groups_te_X, groups_te_Y, indc_list_te, ids_te = get_data(
                         use_preexisting=False, save_preprocessed=False, z_outlier=z_outlier_bool,
@@ -133,7 +134,7 @@ if __name__ == "__main__":
                             grid = itertools.product(f["max_iters_list"], f["gammas"], f["lambdas"])
                             nr_configs = len(f["max_iters_list"]) * len(f["gammas"]) * len(f["lambdas"])
                             # array for saving accuracy
-                            acc_array_val = np.zeros(shape=(nr_configs))
+                            acc_array_val = np.zeros(shape=nr_configs)
                             # for each parameter setup
                             for i, params in enumerate(grid):
                                 params_dict = {
@@ -145,7 +146,7 @@ if __name__ == "__main__":
                                 mean_loss, mean_acc = cross_validation(K, X_tr, Y_tr, params_dict, f["function"])
                                 acc_array_val[i] = mean_acc
 
-                            # get values of best method of this regressionrun
+                            # get values of best method of this regression run
                             index_best = int(np.argmax(acc_array_val))
                             acc_val_best = acc_array_val[index_best]
 
@@ -168,12 +169,14 @@ if __name__ == "__main__":
                         # each tuple (acc, {parameters/function}) will be
                         # appended to the list of the corresponding group
                         with open(LOG_PATH + "/" + log_file_name, "w") as f:
-                            log_dict[group_indx].append((acc_best_total,
-                                                         {"function": f_best_name,
-                                                          "params": best_params,
-                                                          "M": m,
-                                                          "Z": z_outlier_bool,
-                                                          "CA": correlation_analysis_bool,
-                                                          "CE": class_equalizer_bool
-                                                          }))
+                            log_dict[group_indx].append((
+                                acc_best_total,
+                                {
+                                    "function": f_best_name,
+                                    "params": best_params,
+                                    "M": m,
+                                    "Z": z_outlier_bool,
+                                    "CA": correlation_analysis_bool,
+                                    "CE": class_equalizer_bool
+                                }))
                             json.dump(log_dict, f, indent=4)

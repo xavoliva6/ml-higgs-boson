@@ -255,7 +255,7 @@ def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_, **kwa
     """
     N, D = tx.shape
     w = initial_w
-
+    previous_loss = 0
     for n_iter in range(max_iters):
 
         grad = np.zeros(shape=w.shape)
@@ -263,11 +263,16 @@ def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_, **kwa
         s_vec = y * (tx @ w)
         # compute gradient
         grad += -y[s_vec < 1] @ tx[s_vec < 1]
-
         grad = 1 / N * (grad + 2 * lambda_ * w)
 
         # update w by gradient descent update
         w -= gamma * grad
+
+        loss = calculate_hinge_loss(y, tx, w) + lambda_ * w.T @ w
+        if np.abs(loss - previous_loss) < 1e-6:
+            break
+        else:
+            previous_loss = loss
 
         if np.max(w) > 1e9:
             raise ValueError('Support Vector Machine diverged!!!')
