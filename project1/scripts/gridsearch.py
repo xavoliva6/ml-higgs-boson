@@ -91,7 +91,7 @@ if __name__ == "__main__":
     z_outlier = [True, False]
     correlation_analysis = [True, False]
     class_equalizer = [True, False]
-    K = 3
+    K = 4
     pretty_print = "---- "
 
     # create log folder
