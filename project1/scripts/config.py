@@ -71,15 +71,15 @@ IMPLEMENTATIONS = {
     },
     "Logistic Regression": {
         "function": logistic_regression,
-        "max_iters_list": [10],
-        "gammas": [0.01],
+        "max_iters_list": [1500],
+        "gammas": [0.05, 0.01, 0.001],
         "lambdas": [None]
     },
     "Regularized Logistic Regression": {
         "function": reg_logistic_regression,
-        "max_iters_list": [10],
-        "gammas": [0.01],
-        "lambdas": [0.1]
+        "max_iters_list": [1500],
+        "gammas": [0.05, 0.01, 0.001],
+        "lambdas": [0.1, 0.01, 0.001]
     },
     "Support Vector Machine": {
         "function": support_vector_machine_GD,
@@ -89,8 +89,8 @@ IMPLEMENTATIONS = {
     },
     "Least Squares Mini-Batch GD": {
         "function": least_squares_BGD,
-        "max_iters_list": [10],
-        "gammas": [0.5],
+        "max_iters_list": [1500],
+        "gammas": [0.05, 0.01, 0.001],
         "lambdas": [None]
     },
 }
