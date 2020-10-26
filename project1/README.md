@@ -29,7 +29,7 @@ Generated submissions can be found in the path `data/submissions`.
 #### Files:
 
 - **config.py:** contains all our global variables
-- **data_loader.py:** downloads the data from the aforementioned github repository, splits it into training- and test data and preprocesses it, during which paths `data` and `data/preprocessed`
+- **data_loader.py:** downloads the data from the aforementioned github repository, splits it into training- and test data and preprocesses it, during which paths `data` and `data/preprocessed` are created (containing the downloaded `.csv` files and preprocessed files respectively)
 - **exploratory_data_analysis.ipynb:** data exploration and plotting
 - **gridsearch.py:** here we set up a gridsearch to find the optimal parameter values for the preprocessing parameters, the optimal model and the optimal hyperparameters, during which the path `data/logs` is created (containing the accuracies of all tested setups)
 - **implementations.py:** this file contains all our optimization algorithms for the regression tasks, i.e. linear regression using (stochastic) gradient descent, closed form least squares and ridge regression and (regularized logistic regression. We added two more algorithms: support vector machines and least squares badge gradient descent. All functions return their computed optimal weights and the final loss.
