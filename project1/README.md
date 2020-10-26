@@ -20,24 +20,24 @@ and the test data [here](https://github.com/epfml/ML_course/blob/master/projects
 To train, test and make predictions with our final best models on the given data sets, run in your terminal:
 ```
   python3 run.py
-``` 
+```
 
-Our final predictions can be found in the file `XXX`.
+Generated submissions can be found in the path `data/submissions`.
 
 ### Project architecture
 
 #### Files:
 
 - **config.py:** contains all our global variables
-- **data_loader.py:** downloads the data from the aforementioned github repository, splits it into training- and test data and preprocesses it
+- **data_loader.py:** downloads the data from the aforementioned github repository, splits it into training- and test data and preprocesses it, during which paths `data` and `data/preprocessed`
 - **exploratory_data_analysis.ipynb:** data exploration and plotting
-- **gridsearch.py:** here we set up a gridsearch to find the optimal parameter values for the preprocessing parameters, the optimal model and the optimal hyperparameters
+- **gridsearch.py:** here we set up a gridsearch to find the optimal parameter values for the preprocessing parameters, the optimal model and the optimal hyperparameters, during which the path `data/logs` is created (containing the accuracies of all tested setups)
 - **implementations.py:** this file contains all our optimization algorithms for the regression tasks, i.e. linear regression using (stochastic) gradient descent, closed form least squares and ridge regression and (regularized logistic regression. We added two more algorithms: support vector machines and least squares badge gradient descent. All functions return their computed optimal weights and the final loss.
 - **preprocessing.py:** all preprocessing functions are in this file
 - **proj1_helpers.py:** helper functions for loading the data, creating a submissions and predicting target values
 - **requirements.txt:** contains package specifications used to run our project
-- **run.py:** our final predictions with optimal parameter values for the best models on the given data
-- **utils.py:** an assemblance of minor functions used troughout the project
+- **run.py:** our final predictions with optimal parameter values for the best models on the given data, during which the path `data/submissions` is created (containing our finished submissions)
+- **utils.py:** an assemblance of minor functions used throughout the project
 
 
 ### Authors
@@ -46,4 +46,3 @@ The authors (team \[ShoesOrLose]) of this repository are:
 - Devrim Celik ([@Devrim-Celik](https://github.com/Devrim-Celik))
 - Xavier Oliva i Jürgens ([@xavoliva6](https://github.com/xavoliva6))
 - Nina Mainusch ([@Nina-Mainusch](https://github.com/Nina-Mainusch))
-
