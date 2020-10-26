@@ -29,6 +29,9 @@ def download_url(url, save_path, chunk_size=128):
         url (string): url to file to be downloaded
         save_path (string): path to save file
         chunk_size (int): size of chunk for download
+
+    Returns:
+        None
     """
 
     print(f"[*] Downloading from [{url}]")
@@ -67,17 +70,18 @@ def get_data(use_preexisting=True, save_preprocessed=True, z_outlier=False,
                                 saved data files
         save_preprocessed (bool): enabling this parameters will allow the
                                     function to save the preprocessed data
-        z_outlier (bool): enabling this parameters will allow the function to
+        z_outlier (Union[int, bool]): enabling this parameters will allow the function to
                             perform z outlier detection
         feature_expansion (bool): enabling this parameters will allow the
                                     function to perform exponential feature
                                     expansion
-        correlation_analysis (bool): enabling this parameters will allow the
+        correlation_analysis (Union[int, bool]): enabling this parameters will allow the
                                         function to perform correlation analysis
                                         and remove highly correlated features
-        class_equalizer (bool): enabling this parameters will allow the function to
+        class_equalizer (Union[int, bool]): enabling this parameters will allow the function to
                             perform class balancing
-        M (Union[int, float]): feature expansion parameter per group
+        M (Union[int, list]): feature expansion parameter per group
+        z_value (Union[float, list]): outlier detection threshold per group
 
     Returns:
         list: groups of training samples

@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-This file is contains global variables that are shared accross different
+This file is contains global variables that are shared across different
 scripts.
 
 The variables are either
 * paths to data / logs / submissions
-* dictionary that used in gridsearch
+* dictionary that used in grid search
 * a tuple, used in order to split the groups according to missing values (see
     exploratory_data_analysis.ipynb)
 """
@@ -21,6 +21,7 @@ TRAIN_URL = "https://github.com/epfml/ML_course/blob/master/projects/project1/da
 TEST_URL = "https://github.com/epfml/ML_course/blob/master/projects/project1/data/test.csv.zip?raw=true"
 
 LOG_PATH = "../data/logs"
+SUBMISSION_PATH = "../data/submissions"
 
 SUBMISSION_PATH = "../data/submissions"
 
@@ -43,54 +44,66 @@ GROUP_COL_FILTERED_TUPLE = (
 )
 
 IMPLEMENTATIONS = {
-    "Least Squares Gradient Descent": {
-        "function": least_squares_GD,
-        "max_iters_list": [10],
-        "gammas": [0.05],
-        "lambdas": [None],
+     "Least Squares Gradient Descent": {
+         "function": least_squares_GD,
+         "max_iters_list": [10],
+         "gammas": [0.05],
+         "lambdas": [None],
+     },
+     "Least Squares Stochastic GD": {
+         "function": least_squares_SGD,
+         "max_iters_list": [10],
+         "gammas": [0.001],
+         "lambdas": [None],
+     },
+     "Least Squares using Pseudo-Inverse": {
+         "function": least_squares,
+         "max_iters_list": [None],
+         "gammas": [None],
+         "lambdas": [None],
+     },
+     "Ridge Regression": {
+         "function": ridge_regression,
+         "max_iters_list": [None],
+         "gammas": [None],
+         "lambdas": [0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00005, 0.00001]
+     },
+     "Logistic Regression": {
+         "function": logistic_regression,
+         "max_iters_list": [10],
+         "gammas": [0.01],
+         "lambdas": [None]
+     },
+     "Regularized Logistic Regression": {
+         "function": reg_logistic_regression,
+         "max_iters_list": [10],
+         "gammas": [0.01],
+         "lambdas": [0.1]
+     },
+    "Support Vector Machine": {
+    "function": support_vector_machine_GD,
+        "max_iters_list": [5000],
+        "gammas": [0.1, 0.01, 0.001],
+        "lambdas": [0.1, 0.01, 0.001]
     },
-    "Least Squares Stochastic GD": {
-        "function": least_squares_SGD,
-        "max_iters_list": [10],
-        "gammas": [0.001],
-        "lambdas": [None],
+     "Least Squares Mini-Batch GD": {
+         "function": least_squares_BGD,
+         "max_iters_list": [10],
+         "gammas": [0.5],
+         "lambdas": [None]
     },
     "Least Squares using Pseudo-Inverse": {
-        "function": least_squares,
-        "max_iters_list": [None],
-        "gammas": [None],
-        "lambdas": [None],
-    },
-    "Ridge Regression": {
-        "function": ridge_regression,
-        "max_iters_list": [None],
-        "gammas": [None],
-        "lambdas": [0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00005, 0.00001]
-    },
-    "Logistic Regression": {
-        "function": logistic_regression,
-        "max_iters_list": [10],
-        "gammas": [0.01],
-        "lambdas": [None]
-    },
-    "Regularized Logistic Regression": {
-        "function": reg_logistic_regression,
-        "max_iters_list": [10],
-        "gammas": [0.01],
-        "lambdas": [0.1]
-    },
-    "Support Vector Machine": {
-        "function": support_vector_machine_GD,
-        "max_iters_list": [10],
-        "gammas": [0.1],
-        "lambdas": [0.1]
-    },
-    "Least Squares Mini-Batch GD": {
-        "function": least_squares_BGD,
-        "max_iters_list": [10],
-        "gammas": [0.5],
-        "lambdas": [None]
-    },
+         "function": least_squares,
+         "max_iters_list": [None],
+         "gammas": [None],
+         "lambdas": [None],
+     },
+     "Ridge Regression": {
+         "function": ridge_regression,
+         "max_iters_list": [None],
+         "gammas": [None],
+         "lambdas": [0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00005, 0.00001]
+     }
 }
 
 

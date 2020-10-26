@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-This file is responsible for peforming a gridsearch and logging all
+This file is responsible for performing a grid search and logging all
 corresponding accuracies.
 
 In the main function of this script, we first iterate over each possible
 permutation of preprocessing settings. Then, for each of the missing value
-groups (see exploratory_data_analysis.ipynb) we iterate over all avaiable
+groups (see exploratory_data_analysis.ipynb) we iterate over all available
 functions, over different parameter settings.
 """
 
@@ -21,6 +21,7 @@ from config import IMPLEMENTATIONS, LOG_PATH
 
 START_TIME = datetime.datetime.now().strftime("%m_%d_%Y-%H_%M")
 np.random.seed(0)
+
 
 def cross_validation(k, X, y, params, regression):
     """
@@ -85,6 +86,7 @@ def cross_validation(k, X, y, params, regression):
 
 
 if __name__ == "__main__":
+
     # TODO BOOLEANS TO LIST
     M = list(range(1,31,1))
     z_outlier = [True]
@@ -106,7 +108,8 @@ if __name__ == "__main__":
                 for class_equalizer_bool in class_equalizer:
                     print("=" * 80)
                     print(
-                        f" Preprocess Setup: M:{m} | ZOD:{z_outlier_bool} | CA:{correlation_analysis_bool} | CE:{class_equalizer_bool}")
+                        f" Preprocess Setup: M:{m} | ZOD:{z_outlier_bool} | CA:{correlation_analysis_bool} | "
+                        f"CE:{class_equalizer_bool}")
                     # divide the dataset into the multiple groups and preprocess them
                     groups_tr_X, groups_tr_Y, indc_list_tr, groups_te_X, groups_te_Y, indc_list_te, ids_te = get_data(
                         use_preexisting=False, save_preprocessed=False, z_outlier=z_outlier_bool,
@@ -134,7 +137,7 @@ if __name__ == "__main__":
                             grid = itertools.product(f["max_iters_list"], f["gammas"], f["lambdas"])
                             nr_configs = len(f["max_iters_list"]) * len(f["gammas"]) * len(f["lambdas"])
                             # array for saving accuracy
-                            acc_array_val = np.zeros(shape=(nr_configs))
+                            acc_array_val = np.zeros(shape=nr_configs)
                             # for each parameter setup
                             for i, params in enumerate(grid):
                                 params_dict = {

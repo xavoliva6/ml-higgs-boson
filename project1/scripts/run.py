@@ -27,19 +27,14 @@ np.random.seed(0)
 
 def generate_submission(ids_te, Y_te):
     """
-    A short description.
-
-    A bit longer description.
+    Generate submission in submissions path.
 
     Args:
-        variable (type): description
+        ids_te (ndarray): array with IDs of samples
+        Y_te (ndarray): array with class labels of samples
 
     Returns:
-        type: description
-
-    Raises:
-        Exception: description
-
+        None
     """
 
     # generate submission
@@ -55,6 +50,17 @@ def generate_submission(ids_te, Y_te):
 
 
 def generate_best(param_dict=None, log_param_dict_path="../data/logs/best.json"):
+    """
+    Generate submission for the best function-parameters combination. These parameters are given either
+    randomly through param_dict, or automatically fetched from the logs.
+
+    Args:
+        param_dict (dict): dictionary with function and its parameters
+        log_param_dict_path (string): path to logs with best parameters
+
+    Returns:
+        None
+    """
     # if not parameters are given manually, look for a log dictionary
     if not param_dict:
         try:
@@ -84,10 +90,12 @@ def generate_best(param_dict=None, log_param_dict_path="../data/logs/best.json")
         # get shape and create initial parameters
         N, D = X_tr.shape
         W_init = np.random.rand(D, )
-        best_params_train = {"tx": X_tr, "y": Y_tr, "initial_w": W_init,
-                             "max_iters": param_dict[str(group_indx + 1)]["params"][0],
-                             "gamma": param_dict[str(group_indx + 1)]["params"][1],
-                             "lambda_": param_dict[str(group_indx + 1)]["params"][2]}
+        best_params_train = {
+            "tx": X_tr, "y": Y_tr, "initial_w": W_init,
+            "max_iters": param_dict[str(group_indx + 1)]["params"][0],
+            "gamma": param_dict[str(group_indx + 1)]["params"][1],
+            "lambda_": param_dict[str(group_indx + 1)]["params"][2]
+        }
 
         # train it on all available training data
         W_best, _ = IMPLEMENTATIONS[param_dict[str(group_indx + 1)]["function_name"]]["function"](**best_params_train)

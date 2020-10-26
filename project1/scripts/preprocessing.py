@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-This file contains all function that related to preprocesing.
+This file contains all functions that are related to preprocessing.
 """
 
 import numpy as np
@@ -117,8 +117,15 @@ def split_groups(Y, X, group_col_list=config.GROUP_COL_FILTERED_TUPLE):
 
 
 def feature_scale(X):
-    """Feature scaling"""
-    # TODO not used?
+    """
+    Perform feature scaling, so that all values lay in between zero and one
+
+    Args:
+        X (ndarray): array to be scaled
+
+    Returns:
+        ndarray: scaled array
+    """
     min_X = np.min(X, axis=0)
     max_X = np.max(X, axis=0)
     X_norm = (X - min_X) / (max_X - min_X)
@@ -129,8 +136,7 @@ def feature_scale(X):
 def standardize(X):
     """
     Standardizing an array in respect to columns.
-
-    Each columns values are transformed, such that its mean is 0 and variance is 1.
+    Each column values are transformed, such that its mean is 0 and variance is 1.
 
     Args:
         X (ndarray): array to be standardized
@@ -151,7 +157,18 @@ def standardize(X):
 
 
 def split_data(X, Y, ids, val_prop=0.3):
-    """Splits data into training and validation"""
+    """
+    Splits data into training and validation set
+
+    Args:
+        X (ndarray): samples array
+        Y (ndarray): labels array
+        ids (ndarray):
+        val_prop: percentage of samples in the validation set
+    Returns:
+
+
+    """
     # TODO maybe add randomization here?
     # TODO not used?
     X_tr = X[:int(X.shape[0] * (1 - val_prop))]
