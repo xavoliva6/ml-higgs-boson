@@ -35,7 +35,7 @@ Our final predictions can be found in the file `XXX`.
 - **implementations.py:** this file contains all our optimization algorithms for the regression tasks, i.e. linear regression using (stochastic) gradient descent, closed form least squares and ridge regression and (regularized logistic regression. We added two more algorithms: support vector machines and least squares badge gradient descent. All functions return their computed optimal weights and the final loss.
 - **preprocessing.py:** all preprocessing functions are in this file
 - **proj1_helpers.py:** helper functions for loading the data, creating a submissions and predicting target values
-- **project1.ipynb:** 
+- **requirements.txt:** contains package specifications used to run our project
 - **run.py:** our final predictions with optimal parameter values for the best models on the given data
 - **utils.py:** an assemblance of minor functions used troughout the project
 
