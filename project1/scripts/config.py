@@ -23,8 +23,6 @@ TEST_URL = "https://github.com/epfml/ML_course/blob/master/projects/project1/dat
 LOG_PATH = "../data/logs"
 SUBMISSION_PATH = "../data/submissions"
 
-SUBMISSION_PATH = "../data/submissions"
-
 PREPROCESSED_PATH = DATA_PATH + "/" + "preprocessed"
 PREPROCESSED_X_TR_GROUPS_NPY = "../data/preprocessed/X_tr.npy"
 PREPROCESSED_Y_TR_GROUPS_NPY = "../data/preprocessed/Y_tr.npy"
