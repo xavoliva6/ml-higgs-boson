@@ -6,6 +6,7 @@ This file contains all functions that are related to preprocessing.
 import numpy as np
 import config
 
+
 def class_imbalance_equalizer(X, Y):
     """
     Function balancing unbalanced classes in a dataset.
@@ -166,11 +167,13 @@ def split_data(X, Y, ids, val_prop=0.3):
         ids (ndarray):
         val_prop: percentage of samples in the validation set
     Returns:
-
-
+        ndarray: training set array
+        ndarray: training set class labels
+        ndarray: training set IDs
+        ndarray: validation set array
+        ndarray: validation set class labels
+        ndarray: validation set IDs
     """
-    # TODO maybe add randomization here?
-    # TODO not used?
     X_tr = X[:int(X.shape[0] * (1 - val_prop))]
     Y_tr = Y[:int(X.shape[0] * (1 - val_prop))]
     ids_tr = ids[:int(X.shape[0] * (1 - val_prop))]
@@ -183,19 +186,17 @@ def split_data(X, Y, ids, val_prop=0.3):
 
 
 def corr_filter(X, threshold):
-    """ # TODO ADD DESCRIPTION / What does it do, given we use the subgroups
-    A short description.
-
-    A bit longer description.
+    """
+    This function filters columns based on the correlation coefficient value between columns. If two columns have a
+    correlation coefficient higher than threshold, one of them is filtered out.
 
     Args:
-        variable (type): description
+        X (ndarray): samples array
+        threshold (float): correlation coefficient value threshold
 
     Returns:
-        type: description
-
-    Raises:
-        Exception: description
+        ndarray: samples array with columns to keep
+        ndarray: vector with boolean value per column
     """
 
     D = X.shape[1]
@@ -213,8 +214,15 @@ def corr_filter(X, threshold):
 
 def data_replacement(X, method="median"):
     """
-    Replaces missing data points in either matrices or vectors
-    different methods: mean
+    Replaces missing data points in either matrices or vectors using the specified method.
+    Possible methods are 'mean' and 'median'
+
+    Args:
+        X (ndarray): samples array
+        method (string): name of method to be used
+
+    Returns:
+        ndarray: samples array with replaced values per column
     """
 
     # for  a vector
@@ -229,7 +237,16 @@ def data_replacement(X, method="median"):
 
 
 def fill_vec(vec, method):
-    # find all missing points
+    """
+    Find all missing values in a samples column.
+
+    Args:
+        vec (ndarray): samples column
+        method (string): name of method to be used
+
+    Returns:
+        ndarray: samples column with filled values for missing ones, according to method
+    """
     missing = vec == -999.
     feature_method = 0
 
@@ -248,18 +265,17 @@ def fill_vec(vec, method):
     return vec
 
 
-def z_score_outlier_detection(X,
-                              thresh=2.5):  # TODO test this please, do we need this? if not remove the upper 2 functions as well...
+def z_score_outlier_detection(X, thresh=2.5):
     """
     Performs iterative z score outlier detection, in which detect outliers
     are replaced.
 
     Args:
-        X: NxD Matrix, where we look for outliers withing columns
-        thresh: z score threshold
+        X (ndarray): NxD Matrix, where we look for outliers withing columns
+        thresh (float): z score threshold
 
     Returns
-        X: NxD Matrix, without outliers
+        ndarray: NxD Matrix, without outliers
     """
 
     for f_index, feature_vec in enumerate(X.T):
@@ -294,25 +310,22 @@ def add_bias(X):
 
 
 def augment_features_polynomial(X, M):
-    """ # TODO add docstring
-    A short description.
-
-    A bit longer description.
+    """
+    Perform polynomial feature augmentation of samples array.
 
     Args:
-        variable (type): description
+        X (ndarray): samples array
+        M (int): maximal polynomial coefficient
 
     Returns:
-        type: description
-
-    Raises:
-        Exception: description
+        ndarray: augmented samples array
     """
 
-    # TODO: add other types of feature expansions
     if M < 2:
+        # Does not do anything
         return X
 
+    # Depending on the existence of a bias term column, the start index is 0 or 1
     index_start = 1 if np.all(X[:, 0] == 1) else 0
 
     X_poly = X

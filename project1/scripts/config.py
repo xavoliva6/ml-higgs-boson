@@ -44,75 +44,53 @@ GROUP_COL_FILTERED_TUPLE = (
 )
 
 IMPLEMENTATIONS = {
-     "Least Squares Gradient Descent": {
-         "function": least_squares_GD,
-         "max_iters_list": [10],
-         "gammas": [0.05],
-         "lambdas": [None],
-     },
-     "Least Squares Stochastic GD": {
-         "function": least_squares_SGD,
-         "max_iters_list": [10],
-         "gammas": [0.001],
-         "lambdas": [None],
-     },
-     "Least Squares using Pseudo-Inverse": {
-         "function": least_squares,
-         "max_iters_list": [None],
-         "gammas": [None],
-         "lambdas": [None],
-     },
-     "Ridge Regression": {
-         "function": ridge_regression,
-         "max_iters_list": [None],
-         "gammas": [None],
-         "lambdas": [0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00005, 0.00001]
-     },
-     "Logistic Regression": {
-         "function": logistic_regression,
-         "max_iters_list": [10],
-         "gammas": [0.01],
-         "lambdas": [None]
-     },
-     "Regularized Logistic Regression": {
-         "function": reg_logistic_regression,
-         "max_iters_list": [10],
-         "gammas": [0.01],
-         "lambdas": [0.1]
-     },
+    "Least Squares Gradient Descent": {
+        "function": least_squares_GD,
+        "max_iters_list": [1500],
+        "gammas": [0.05, 0.01, 0.001],
+        "lambdas": [None],
+    },
+    "Least Squares Stochastic GD": {
+        "function": least_squares_SGD,
+        "max_iters_list": [1500],
+        "gammas": [0.05, 0.01, 0.001],
+        "lambdas": [None],
+    },
+    "Least Squares using Pseudo-Inverse": {
+        "function": least_squares,
+        "max_iters_list": [None],
+        "gammas": [None],
+        "lambdas": [None],
+    },
+    "Ridge Regression": {
+        "function": ridge_regression,
+        "max_iters_list": [1500],
+        "gammas": [None],
+        "lambdas": [0.1, 0.075, 0.05, 0.025, 0.01, 0.0075, 0.005, 0.0025, 0.001, 0.00075, 0.0005, 0.00025, 0.0001,
+                    0.000075, 0.00005, 0.000025, 0.00001]
+    },
+    "Logistic Regression": {
+        "function": logistic_regression,
+        "max_iters_list": [10],
+        "gammas": [0.01],
+        "lambdas": [None]
+    },
+    "Regularized Logistic Regression": {
+        "function": reg_logistic_regression,
+        "max_iters_list": [10],
+        "gammas": [0.01],
+        "lambdas": [0.1]
+    },
     "Support Vector Machine": {
-    "function": support_vector_machine_GD,
+        "function": support_vector_machine_GD,
         "max_iters_list": [5000],
         "gammas": [0.1, 0.01, 0.001],
         "lambdas": [0.1, 0.01, 0.001]
     },
-     "Least Squares Mini-Batch GD": {
-         "function": least_squares_BGD,
-         "max_iters_list": [10],
-         "gammas": [0.5],
-         "lambdas": [None]
+    "Least Squares Mini-Batch GD": {
+        "function": least_squares_BGD,
+        "max_iters_list": [10],
+        "gammas": [0.5],
+        "lambdas": [None]
     },
-    "Least Squares using Pseudo-Inverse": {
-         "function": least_squares,
-         "max_iters_list": [None],
-         "gammas": [None],
-         "lambdas": [None],
-     },
-     "Ridge Regression": {
-         "function": ridge_regression,
-         "max_iters_list": [None],
-         "gammas": [None],
-         "lambdas": [0.01, 0.005, 0.001, 0.0005, 0.0001, 0.00005, 0.00001]
-     }
-}
-
-
-
-IMPLEMENTATIONS = {
-    "Ridge Regression": {
-        "function": ridge_regression,
-        "max_iters_list": [None],
-        "gammas": [None],
-        "lambdas": [0.1, 0.075, 0.05, 0.025, 0.01, 0.0075, 0.005, 0.0025, 0.001, 0.00075, 0.0005, 0.00025, 0.0001, 0.000075, 0.00005, 0.000025, 0.00001]
-    }
 }

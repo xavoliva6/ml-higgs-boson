@@ -99,7 +99,6 @@ def generate_best(param_dict=None, log_param_dict_path="../data/logs/best.json")
 
         # train it on all available training data
         W_best, _ = IMPLEMENTATIONS[param_dict[str(group_indx + 1)]["function_name"]]["function"](**best_params_train)
-
         # write into the corresponding indexes of this group
         Y_te[Y_te_indx] = predict_labels(W_best, X_te)
 
@@ -107,12 +106,19 @@ def generate_best(param_dict=None, log_param_dict_path="../data/logs/best.json")
 
 
 if __name__ == "__main__":
+    # dictionary containing parameters for the best submission
     best_dictionary = {
-    '1': {'M': 30, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression', 'params': [None, None, 0.1 / (2 * 68114)]},
-    '2': {'M': 30, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression', 'params': [None, None, 0.1 / (2 * 4429)]},
-    '3': {'M': 30, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression', 'params': [None, None, 0.1 / (2 * 69982)]},
-    '4': {'M': 30, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression', 'params': [None, None, 0.1 / (2 * 7562)]},
-    '5': {'M': 30, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression', 'params': [None, None, 0.1 / (2 * 73790)]},
-    '6': {'M': 30, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression', 'params': [None, None, 0.1 / (2 * 26123)]}
+        '1': {'M': 7, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression',
+              'params': [None, None, 0.00025]},
+        '2': {'M': 10, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression',
+              'params': [None, None, 0.0005]},
+        '3': {'M': 9, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression',
+              'params': [None, None, 0.0005]},
+        '4': {'M': 25, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression',
+              'params': [None, None, 0.00025]},
+        '5': {'M': 9, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression',
+              'params': [None, None, 0.001]},
+        '6': {'M': 28, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression',
+              'params': [None, None, 7.5e-05]}
     }
-    generate_best()
+    generate_best(best_dictionary)

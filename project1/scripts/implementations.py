@@ -97,7 +97,7 @@ def least_squares_SGD(y, tx, initial_w, max_iters, gamma, **kwargs):
 
 def least_squares(y, tx, **kwargs):
     """
-    Least squares regression computed using the pseudo-inverse.
+    Least squares regression computed using closed-form solution.
 
     Args:
         y (ndarray): 1D array containing labels
@@ -131,7 +131,7 @@ def least_squares(y, tx, **kwargs):
 
 def ridge_regression(y, tx, lambda_, **kwargs):
     """
-    Ridge regression computed using the regularized pseudo-inverse.
+    Ridge regression computed using the regularized closed-form solution.
 
     Args:
         y (ndarray): 1D array containing labels
@@ -150,7 +150,7 @@ def ridge_regression(y, tx, lambda_, **kwargs):
 
     # compute w using explicit solution
     # although this would be the "correct" formula, we will instead not
-    #w = np.linalg.solve(tx.T @ tx + 2 * N * lambda_ * np.identity(D), tx.T @ y)
+    # w = np.linalg.solve(tx.T @ tx + 2 * N * lambda_ * np.identity(D), tx.T @ y)
     # use 2*N, due to the fact that it makes iterating over a range of lambdas
     # much harder
     w = np.linalg.solve(tx.T @ tx + lambda_ * np.identity(D), tx.T @ y)
@@ -262,7 +262,6 @@ def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_, **kwa
     """
     N, D = tx.shape
     w = initial_w
-    previous_loss = 0
     for n_iter in range(max_iters):
 
         grad = np.zeros(shape=w.shape)
@@ -274,12 +273,6 @@ def support_vector_machine_GD(y, tx, initial_w, max_iters, gamma, lambda_, **kwa
 
         # update w by gradient descent update
         w -= gamma * grad
-
-        loss = calculate_hinge_loss(y, tx, w) + lambda_ * w.T @ w
-        if np.abs(loss - previous_loss) < 1e-6:
-            break
-        else:
-            previous_loss = loss
 
         if np.max(w) > 1e9:
             raise ValueError('Support Vector Machine diverged!!!')
@@ -325,7 +318,7 @@ def least_squares_BGD(y, tx, initial_w, max_iters, gamma, batch_size=1024, **kwa
         e = y_b - tx_b @ w
         grad = - 1 / batch_size * tx_b.T @ e
         # update w by gradient descent update
-        w -= gamma / n_iter * grad
+        w -= (gamma / n_iter) * grad
 
         if np.max(w) > 1e9:
             raise ValueError('Least Squares mini-batch GD diverged!!!')

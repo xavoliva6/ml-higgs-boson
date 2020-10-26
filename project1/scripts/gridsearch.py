@@ -66,7 +66,7 @@ def cross_validation(k, X, y, params, regression):
         except ValueError:
             print("Regression diverged with these parameters.")
             return None, None
-        # TODO
+
         if "Logistic" in f_name:
             prediction_val_regression = sigmoid(X_val @ W)
         else:
@@ -87,11 +87,10 @@ def cross_validation(k, X, y, params, regression):
 
 if __name__ == "__main__":
 
-    # TODO BOOLEANS TO LIST
-    M = list(range(1,31,1))
-    z_outlier = [True]
-    correlation_analysis = [True]
-    class_equalizer = [False]
+    M = list(range(1, 31, 1))
+    z_outlier = [True, False]
+    correlation_analysis = [True, False]
+    class_equalizer = [True, False]
     K = 3
     pretty_print = "---- "
 
@@ -113,13 +112,13 @@ if __name__ == "__main__":
                     # divide the dataset into the multiple groups and preprocess them
                     groups_tr_X, groups_tr_Y, indc_list_tr, groups_te_X, groups_te_Y, indc_list_te, ids_te = get_data(
                         use_preexisting=False, save_preprocessed=False, z_outlier=z_outlier_bool,
-                        feature_expansion=True,
-                        correlation_analysis=correlation_analysis_bool, class_equalizer=class_equalizer_bool, M=int(m))
+                        feature_expansion=True, correlation_analysis=correlation_analysis_bool,
+                        class_equalizer=class_equalizer_bool, M=int(m))
 
                     # for each group...
                     for group_indx, (X_tr, Y_tr, X_te, Y_te_indx) in enumerate(
                             zip(groups_tr_X, groups_tr_Y, groups_te_X, indc_list_te), start=1):
-                        # print("=" * 240)
+
                         print(pretty_print * 2 + f"Group: {group_indx}")
 
                         # get the shape of the sample array
@@ -133,7 +132,7 @@ if __name__ == "__main__":
                         f_list = []
                         for j, [f_name, f] in enumerate(IMPLEMENTATIONS.items()):
                             print(pretty_print * 3 + f"Function: {f_name}...")
-                            # create grid for grid search
+                            # create grid for grid search, cartesian product of lists
                             grid = itertools.product(f["max_iters_list"], f["gammas"], f["lambdas"])
                             nr_configs = len(f["max_iters_list"]) * len(f["gammas"]) * len(f["lambdas"])
                             # array for saving accuracy
@@ -151,16 +150,17 @@ if __name__ == "__main__":
 
                                 # each tuple (acc, {parameters/function}) will be
                                 # appended to the list of the corresponding group
-                                f_list.append([mean_acc,{"function": f_name,
-                                                      "params": params,
-                                                      "M": m,
-                                                      "Z": z_outlier_bool,
-                                                      "CA": correlation_analysis_bool,
-                                                      "CE": class_equalizer_bool
-                                                      }])
+                                f_list.append([mean_acc, {
+                                    "function": f_name,
+                                    "params": params,
+                                    "M": m,
+                                    "Z": z_outlier_bool,
+                                    "CA": correlation_analysis_bool,
+                                    "CE": class_equalizer_bool
+                                }])
 
                         """
-                            # get values of best method of this regressionrun
+                            # get values of best method of this regression run
                             index_best = int(np.argmax(acc_array_val))
                             acc_val_best = acc_array_val[index_best]
 
