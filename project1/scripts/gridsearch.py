@@ -86,7 +86,7 @@ def cross_validation(k, X, y, params, regression):
 
 
 if __name__ == "__main__":
-    M = [1, 10, 20, 30]
+    M = list(range(1,31,1)) 
     z_outlier = [True, False]
     correlation_analysis = [True, False]
     class_equalizer = [True, False]
