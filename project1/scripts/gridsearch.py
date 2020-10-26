@@ -85,11 +85,12 @@ def cross_validation(k, X, y, params, regression):
 
 
 if __name__ == "__main__":
-    M = list(range(1,31,5))
-    z_outlier = [True, False]
-    correlation_analysis = [True, False]
-    class_equalizer = [True, False]
-    K = 4
+    # TODO BOOLEANS TO LIST
+    M = list(range(1,31,1))
+    z_outlier = [True]
+    correlation_analysis = [True]
+    class_equalizer = [False]
+    K = 3
     pretty_print = "---- "
 
     # create log folder
@@ -110,7 +111,7 @@ if __name__ == "__main__":
                     groups_tr_X, groups_tr_Y, indc_list_tr, groups_te_X, groups_te_Y, indc_list_te, ids_te = get_data(
                         use_preexisting=False, save_preprocessed=False, z_outlier=z_outlier_bool,
                         feature_expansion=True,
-                        correlation_analysis=correlation_analysis_bool, class_equalizer=class_equalizer_bool, M=m)
+                        correlation_analysis=correlation_analysis_bool, class_equalizer=class_equalizer_bool, M=int(m))
 
                     # for each group...
                     for group_indx, (X_tr, Y_tr, X_te, Y_te_indx) in enumerate(
@@ -126,6 +127,7 @@ if __name__ == "__main__":
                         acc_best_total = 0
 
                         # go through each function
+                        f_list = []
                         for j, [f_name, f] in enumerate(IMPLEMENTATIONS.items()):
                             print(pretty_print * 3 + f"Function: {f_name}...")
                             # create grid for grid search
@@ -144,6 +146,17 @@ if __name__ == "__main__":
                                 mean_loss, mean_acc = cross_validation(K, X_tr, Y_tr, params_dict, f["function"])
                                 acc_array_val[i] = mean_acc
 
+                                # each tuple (acc, {parameters/function}) will be
+                                # appended to the list of the corresponding group
+                                f_list.append([mean_acc,{"function": f_name,
+                                                      "params": params,
+                                                      "M": m,
+                                                      "Z": z_outlier_bool,
+                                                      "CA": correlation_analysis_bool,
+                                                      "CE": class_equalizer_bool
+                                                      }])
+
+                        """
                             # get values of best method of this regressionrun
                             index_best = int(np.argmax(acc_array_val))
                             acc_val_best = acc_array_val[index_best]
@@ -163,16 +176,9 @@ if __name__ == "__main__":
                         for i, params in enumerate(grid):
                             if i == index_best_total[1]:
                                 best_params = params
-
+                        """
                         # each tuple (acc, {parameters/function}) will be
                         # appended to the list of the corresponding group
                         with open(LOG_PATH + "/" + log_file_name, "w") as f:
-                            log_dict[group_indx].append((acc_best_total,
-                                                         {"function": f_best_name,
-                                                          "params": best_params,
-                                                          "M": m,
-                                                          "Z": z_outlier_bool,
-                                                          "CA": correlation_analysis_bool,
-                                                          "CE": class_equalizer_bool
-                                                          }))
+                            log_dict[group_indx].extend(f_list)
                             json.dump(log_dict, f, indent=4)

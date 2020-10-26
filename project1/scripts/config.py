@@ -22,6 +22,8 @@ TEST_URL = "https://github.com/epfml/ML_course/blob/master/projects/project1/dat
 
 LOG_PATH = "../data/logs"
 
+SUBMISSION_PATH = "../data/submissions"
+
 PREPROCESSED_PATH = DATA_PATH + "/" + "preprocessed"
 PREPROCESSED_X_TR_GROUPS_NPY = "../data/preprocessed/X_tr.npy"
 PREPROCESSED_Y_TR_GROUPS_NPY = "../data/preprocessed/Y_tr.npy"
@@ -89,4 +91,15 @@ IMPLEMENTATIONS = {
         "gammas": [0.5],
         "lambdas": [None]
     },
+}
+
+
+
+IMPLEMENTATIONS = {
+    "Ridge Regression": {
+        "function": ridge_regression,
+        "max_iters_list": [None],
+        "gammas": [None],
+        "lambdas": [0.1, 0.075, 0.05, 0.025, 0.01, 0.0075, 0.005, 0.0025, 0.001, 0.00075, 0.0005, 0.00025, 0.0001, 0.000075, 0.00005, 0.000025, 0.00001]
+    }
 }

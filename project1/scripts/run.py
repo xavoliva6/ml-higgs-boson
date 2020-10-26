@@ -73,7 +73,7 @@ def generate_best(param_dict=None, log_param_dict_path="../data/logs/best.json")
     # divide the dataset into the multiple groups and preprocess it
     # TODO change preexisting to False
     groups_tr_X, groups_tr_Y, indc_list_tr, groups_te_X, groups_te_Y, indc_list_te, ids_te = get_data(
-        use_preexisting=False, save_preprocessed=True, z_outlier=z_outlier_list, feature_expansion=True,
+        use_preexisting=False, save_preprocessed=False, z_outlier=z_outlier_list, feature_expansion=True,
         correlation_analysis=corr_anal_list, class_equalizer=class_equalizer_list, M=M_list)
     # numpy array for submission
     Y_te = np.zeros(shape=(568238,))
@@ -99,53 +99,12 @@ def generate_best(param_dict=None, log_param_dict_path="../data/logs/best.json")
 
 
 if __name__ == "__main__":
-    best_dictionary = {"1": {
-        "M": 5,
-        "corr_anal": True,
-        "class_eq": False,
-        "z_outlier": False,
-        "function_name": "Ridge Regression",
-        "params": [None, None, 0.8]
-    },
-        "2": {
-            "M": 5,
-            "corr_anal": True,
-            "class_eq": False,
-            "z_outlier": False,
-            "function_name": "Ridge Regression",
-            "params": [None, None, 0.8]
-        },
-        "3": {
-            "M": 5,
-            "class_eq": False,
-            "corr_anal": True,
-            "z_outlier": False,
-            "function_name": "Ridge Regression",
-            "params": [None, None, 0.8]
-        },
-        "4": {
-            "M": 5,
-            "corr_anal": True,
-            "class_eq": False,
-            "z_outlier": False,
-            "function_name": "Ridge Regression",
-            "params": [None, None, 0.8]
-        },
-        "5": {
-            "M": 5,
-            "corr_anal": True,
-            "class_eq": False,
-            "z_outlier": False,
-            "function_name": "Ridge Regression",
-            "params": [None, None, 0.8]
-        },
-        "6": {
-            "M": 5,
-            "corr_anal": True,
-            "class_eq": False,
-            "z_outlier": False,
-            "function_name": "Ridge Regression",
-            "params": [None, None, 0.8]
-        }
+    best_dictionary = {
+    '1': {'M': 30, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression', 'params': [None, None, 0.1 / (2 * 68114)]},
+    '2': {'M': 30, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression', 'params': [None, None, 0.1 / (2 * 4429)]},
+    '3': {'M': 30, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression', 'params': [None, None, 0.1 / (2 * 69982)]},
+    '4': {'M': 30, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression', 'params': [None, None, 0.1 / (2 * 7562)]},
+    '5': {'M': 30, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression', 'params': [None, None, 0.1 / (2 * 73790)]},
+    '6': {'M': 30, 'corr_anal': True, 'class_eq': False, 'z_outlier': True, 'function_name': 'Ridge Regression', 'params': [None, None, 0.1 / (2 * 26123)]}
     }
     generate_best()

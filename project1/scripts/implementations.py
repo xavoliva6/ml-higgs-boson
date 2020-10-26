@@ -117,7 +117,10 @@ def least_squares(y, tx, **kwargs):
     # matrices, see the following link:
     # https://stackoverflow.com/questions/41648246/efficient-computation-of-the-least-squares-algorithm-in-numpy
     # When adding rows to equalize class imbalance, tx.T @ tx does not have a full column rank.
-    w = np.linalg.lstsq(tx, y)
+    try:
+        w = np.linalg.solve(tx.T @ tx, tx.T @ y)
+    except:
+        w = np.linalg.lstsq(tx, y)
     # calculate loss
     y_pred = tx @ w
     loss = calculate_mse_loss(y, y_pred)
@@ -145,7 +148,11 @@ def ridge_regression(y, tx, lambda_, **kwargs):
     N, D = tx.shape
 
     # compute w using explicit solution
-    w = np.linalg.solve(tx.T @ tx + 2 * N * lambda_ * np.identity(D), tx.T @ y)
+    # although this would be the "correct" formula, we will instead not
+    #w = np.linalg.solve(tx.T @ tx + 2 * N * lambda_ * np.identity(D), tx.T @ y)
+    # use 2*N, due to the fact that it makes iterating over a range of lambdas
+    # much harder
+    w = np.linalg.solve(tx.T @ tx + lambda_ * np.identity(D), tx.T @ y)
 
     # calculate loss
     y_pred = tx @ w
