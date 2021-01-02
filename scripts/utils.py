@@ -146,7 +146,7 @@ def calculate_logistic_loss(y, tx, w):
     """
     N = len(y)
     pred = sigmoid(tx @ w)
-    # https://ml-cheatsheet.readthedocs.io/en/latest/logistic_regression.html
+     # https://ml-cheatsheet.readthedocs.io/en/latest/logistic_regression.html
     # https://stackoverflow.com/questions/38125319/python-divide-by-zero-encountered-in-log-logistic-regression
     EPSILON = 1e-10
     loss = -1 / N * (y.T @ np.log(pred + EPSILON) + (1 - y).T @ np.log(1 - pred + EPSILON))
